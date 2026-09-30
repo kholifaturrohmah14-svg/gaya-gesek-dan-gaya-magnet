@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detektif Gaya — MPI IPAS Kelas 4 (Gaya Gesek & Gaya Magnet)</title>
+<style>
+/* ============================= THEME ============================= */
+:root{
+  --green:#2e7d32; --green-d:#1b5e20; --green-l:#66bb6a; --green-xl:#e8f5e9;
+  --brown:#795548; --amber:#ffb300; --amber-l:#fff8e1;
+  --blue:#1565c0; --blue-l:#e3f2fd; --red:#e53935; --red-l:#ffebee;
+  --ink:#1f2d24; --muted:#5b6b60; --card:#ffffff; --bg:#f3f8f2;
+  --radius:20px; --shadow:0 8px 24px rgba(30,60,40,.10); --shadow-s:0 3px 10px rgba(30,60,40,.08);
+  --f-head:'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{
+  font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.65; font-size:16px;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--f-head); margin:0 0 .5rem; line-height:1.25;}
+button{font-family:inherit; cursor:pointer; border:none;}
+img{max-width:100%;}
+
+/* ============================= TOPBAR ============================= */
+.topbar{
+  position:sticky; top:0; z-index:900;
+  background:linear-gradient(120deg,#1b5e20,#2e7d32 45%,#388e3c);
+  color:#fff; box-shadow:0 4px 18px rgba(0,0,0,.18);
+}
+.topbar-in{
+  max-width:1220px; margin:0 auto; padding:8px 14px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--f-head); font-weight:800; font-size:1.15rem; letter-spacing:.3px;}
+.brand .logo{
+  width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff59d,#ffb300);
+  display:grid;place-items:center;font-size:22px;box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+.brand small{display:block;font-size:.68rem;font-weight:600;opacity:.85;letter-spacing:.5px;}
+.nav{display:flex; gap:6px; flex-wrap:nowrap; overflow-x:auto; padding:2px; margin-left:auto; scrollbar-width:thin;}
+.nav::-webkit-scrollbar{height:5px;}
+.nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:9px;}
+.nav button{
+  background:rgba(255,255,255,.13); color:#fff; padding:8px 14px; border-radius:999px;
+  font-size:.86rem; font-weight:700; white-space:nowrap; transition:.2s; border:1.5px solid transparent;
+}
+.nav button:hover{background:rgba(255,255,255,.28); transform:translateY(-1px);}
+.nav button.active{background:#ffd54f; color:#3e2723; border-color:#fff; box-shadow:0 3px 12px rgba(255,213,79,.5);}
+.icon-btn{
+  background:rgba(255,255,255,.16); color:#fff; width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;font-size:18px; transition:.2s; flex:0 0 auto;
+}
+.icon-btn:hover{background:rgba(255,255,255,.32); transform:scale(1.06);}
+
+/* ============================= LAYOUT ============================= */
+main{max-width:1220px; margin:0 auto; padding:18px 14px 60px;}
+.view{display:none; animation:fade .45s ease;}
+.view.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+.card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:22px; margin-bottom:18px; border:1px solid rgba(46,125,50,.08);
+}
+.section-title{
+  display:flex; align-items:center; gap:10px; font-family:var(--f-head);
+  font-size:1.45rem; color:var(--green-d); margin-bottom:6px;
+}
+.section-title .em{font-size:1.6rem;}
+.sub{color:var(--muted); font-size:.94rem; margin-bottom:14px;}
+.btn{
+  background:linear-gradient(135deg,var(--green-l),var(--green)); color:#fff; font-weight:800;
+  padding:13px 24px; border-radius:999px; font-size:1rem; box-shadow:0 6px 16px rgba(46,125,50,.32);
+  transition:.2s; display:inline-flex; align-items:center; gap:9px;
+}
+.btn:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(46,125,50,.4);}
+.btn:active{transform:translateY(0) scale(.98);}
+.btn.amber{background:linear-gradient(135deg,#ffd54f,#ffa000); color:#4e342e; box-shadow:0 6px 16px rgba(255,160,0,.35);}
+.btn.blue{background:linear-gradient(135deg,#64b5f6,#1565c0); box-shadow:0 6px 16px rgba(21,101,192,.32);}
+.btn.ghost{background:#fff; color:var(--green-d); border:2px solid var(--green-l); box-shadow:var(--shadow-s);}
+.btn.small{padding:9px 16px; font-size:.85rem;}
+
+/* ============================= LANDING ============================= */
+.hero{
+  position:relative; overflow:hidden; border-radius:26px; padding:34px 28px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255,213,79,.55), transparent 42%),
+    radial-gradient(circle at 8% 88%, rgba(102,187,106,.45), transparent 45%),
+    linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 45%,#fffde7 100%);
+  border:2px dashed rgba(46,125,50,.25); box-shadow:var(--shadow);
+}
+.hero-deco{position:absolute; font-size:2rem; opacity:.5; animation:float 5s ease-in-out infinite; pointer-events:none;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-14px) rotate(9deg);}}
+.hero h1{font-size:clamp(1.7rem,4.6vw,2.7rem); color:var(--green-d); margin-bottom:8px;}
+.hero p.lead{font-size:clamp(.98rem,2.2vw,1.12rem); color:#37474f; max-width:720px;}
+.badge-row{display:flex; gap:8px; flex-wrap:wrap; margin:16px 0 20px;}
+.pill{
+  background:#fff; border:2px solid rgba(46,125,50,.16); color:var(--green-d);
+  padding:7px 15px; border-radius:999px; font-size:.82rem; font-weight:800; box-shadow:var(--shadow-s);
+}
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap;}
+.mascot{font-size:clamp(3rem,9vw,5rem); text-align:center; animation:bounce 2.4s ease-in-out infinite; user-select:none;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.feature-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:16px; margin-top:6px;}
+.feature{
+  background:#fff; border-radius:18px; padding:20px; box-shadow:var(--shadow-s);
+  border:2px solid transparent; transition:.25s; cursor:pointer; position:relative; overflow:hidden;
+}
+.feature::before{content:''; position:absolute; inset:0 auto 0 0; width:6px; background:linear-gradient(var(--green-l),var(--green));}
+.feature:hover{transform:translateY(-5px); border-color:var(--green-l); box-shadow:var(--shadow);}
+.feature .ico{font-size:2.1rem; display:block; margin-bottom:6px;}
+.feature h3{font-size:1.06rem; color:var(--green-d); margin-bottom:4px;}
+.feature p{font-size:.86rem; color:var(--muted); margin:0;}
+
+/* ============================= MATERI ============================= */
+.materi-wrap{display:grid; grid-template-columns:250px 1fr; gap:20px; align-items:start;}
+.toc{
+  background:#fff; border-radius:18px; padding:16px; box-shadow:var(--shadow-s);
+  position:sticky; top:80px; border:1px solid rgba(46,125,50,.1);
+}
+.toc h4{font-size:.95rem; color:var(--green-d); margin-bottom:8px;}
+.toc a{
+  display:block; padding:8px 11px; border-radius:10px; color:var(--muted); text-decoration:none;
+  font-size:.85rem; font-weight:700; margin-bottom:3px; transition:.2s;
+}
+.toc a:hover{background:var(--green-xl); color:var(--green-d); transform:translateX(4px);}
+.materi-body h3{
+  font-size:1.2rem; color:#fff; background:linear-gradient(120deg,var(--green),var(--green-l));
+  padding:11px 17px; border-radius:13px; margin:26px 0 12px; box-shadow:var(--shadow-s);
+}
+.materi-body h3:first-child{margin-top:0;}
+.materi-body h4{font-size:1.03rem; color:var(--green-d); margin:18px 0 6px;}
+.materi-body p{margin:0 0 11px; text-align:justify;}
+.materi-body ul, .materi-body ol{margin:0 0 13px; padding-left:22px;}
+.materi-body li{margin-bottom:5px;}
+.box{
+  border-radius:15px; padding:15px 18px; margin:14px 0; border-left:6px solid var(--green-l);
+  background:var(--green-xl);
+}
+.box.warn{background:var(--red-l); border-left-color:var(--red);}
+.box.amber{background:var(--amber-l); border-left-color:var(--amber);}
+.box.blue{background:var(--blue-l); border-left-color:var(--blue);}
+.box b{color:var(--green-d);}
+.box.warn b{color:#b71c1c;}
+.kv-table{width:100%; border-collapse:collapse; margin:14px 0; border-radius:13px; overflow:hidden; box-shadow:var(--shadow-s);}
+.kv-table th{background:linear-gradient(120deg,var(--green),var(--green-l)); color:#fff; padding:11px; text-align:left; font-size:.9rem;}
+.kv-table td{padding:11px; background:#fff; border-bottom:1px solid #eef3ee; font-size:.9rem; vertical-align:top;}
+.kv-table tr:last-child td{border-bottom:none;}
+.kv-table tr:nth-child(even) td{background:#f8fbf8;}
+.keyword{display:inline-block; background:#fff; border:2px dashed var(--green-l); color:var(--green-d);
+  padding:4px 12px; border-radius:999px; font-weight:800; font-size:.83rem; margin:4px 5px 4px 0;}
+.materi-img{border-radius:16px; overflow:hidden; box-shadow:var(--shadow-s); margin:14px 0; background:#eef3ee;}
+.materi-img svg{display:block; width:100%; height:auto;}
+
+/* ============================= LAB ============================= */
+.lab-grid{display:grid; grid-template-columns:1.35fr 1fr; gap:20px; align-items:start;}
+.canvas-wrap{background:#fff; border-radius:18px; padding:12px; box-shadow:var(--shadow-s); border:1px solid rgba(46,125,50,.1);}
+canvas{width:100%; height:auto; display:block; border-radius:13px;}
+.controls{background:#fff; border-radius:18px; padding:18px; box-shadow:var(--shadow-s); border:1px solid rgba(46,125,50,.1);}
+.slider-group{margin-bottom:16px;}
+.slider-group label{display:flex; justify-content:space-between; font-weight:800; font-size:.87rem; color:var(--green-d); margin-bottom:6px;}
+.slider-group label span.val{background:var(--green-xl); color:var(--green-d); padding:2px 11px; border-radius:999px; font-size:.82rem;}
+input[type=range]{
+  -webkit-appearance:none; width:100%; height:9px; border-radius:99px; background:#dfe9df; outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#a5d6a7,#2e7d32); border:3px solid #fff;
+  box-shadow:0 3px 9px rgba(0,0,0,.28); cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;background:#2e7d32;border:3px solid #fff;cursor:pointer;
+}
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:8px;}
+.readout .ro{background:var(--green-xl); border-radius:13px; padding:10px; text-align:center; border:1px solid rgba(46,125,50,.12);}
+.readout .ro small{display:block; font-size:.68rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.4px;}
+.readout .ro b{font-size:1.12rem; color:var(--green-d);}
+.status-bar{
+  margin-top:12px; padding:11px 15px; border-radius:13px; font-weight:800; font-size:.9rem;
+  background:var(--amber-l); border-left:6px solid var(--amber); color:#6d4c00;
+}
+.mode-tabs{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+.mode-tabs button{
+  flex:1; min-width:130px; padding:11px; border-radius:13px; font-weight:800; font-size:.86rem;
+  background:#fff; color:var(--muted); border:2px solid #e0e8e0; transition:.2s;
+}
+.mode-tabs button.active{background:linear-gradient(135deg,var(--green-l),var(--green)); color:#fff; border-color:transparent; box-shadow:var(--shadow-s);}
+
+/* ============================= PUZZLE ============================= */
+.puzzle-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
+.pool{
+  background:#fff; border-radius:18px; padding:14px; box-shadow:var(--shadow-s); min-height:150px;
+  display:flex; flex-wrap:wrap; gap:10px; align-content:flex-start; border:2px dashed #cfe0cf;
+}
+.pcard{
+  background:linear-gradient(135deg,#ffffff,#f1f8e9); border:2px solid var(--green-l); border-radius:14px;
+  padding:11px 14px; font-size:.85rem; font-weight:700; color:var(--green-d); cursor:grab;
+  box-shadow:var(--shadow-s); user-select:none; touch-action:none; transition:transform .16s, box-shadow .16s;
+  max-width:100%;
+}
+.pcard:hover{transform:translateY(-3px) scale(1.02); box-shadow:var(--shadow);}
+.pcard.selected{outline:4px solid #ffd54f; outline-offset:2px;}
+.pcard.dragging{opacity:.35;}
+.pcard.correct{background:linear-gradient(135deg,#c8e6c9,#a5d6a7); border-color:#2e7d32; cursor:default;}
+.pcard.wrong{background:linear-gradient(135deg,#ffcdd2,#ef9a9a); border-color:#c62828; animation:shake .4s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+.ghost-card{
+  position:fixed; z-index:3000; pointer-events:none; transform:rotate(-4deg) scale(1.05);
+  box-shadow:0 14px 30px rgba(0,0,0,.28); border-radius:14px; padding:11px 14px; font-size:.85rem;
+  font-weight:700; background:#fff8e1; border:2px solid var(--amber); color:#5d4037; max-width:260px;
+}
+.bins{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.bin{
+  background:#fff; border-radius:18px; box-shadow:var(--shadow-s); overflow:hidden;
+  border:3px dashed transparent; transition:.2s;
+}
+.bin[data-bin="gesek"]{border-color:#ffb74d;}
+.bin[data-bin="magnet"]{border-color:#64b5f6;}
+.bin.over{transform:scale(1.03); box-shadow:0 0 0 5px rgba(255,213,79,.5), var(--shadow);}
+.bin-head{padding:10px 14px; font-weight:800; font-size:.92rem; color:#fff; font-family:var(--f-head);}
+.bin[data-bin="gesek"] .bin-head{background:linear-gradient(120deg,#fb8c00,#ef6c00);}
+.bin[data-bin="magnet"] .bin-head{background:linear-gradient(120deg,#42a5f5,#1565c0);}
+.bin-body{padding:12px; display:flex; flex-direction:column; gap:9px; min-height:230px;}
+
+/* ============================= EVALUASI ============================= */
+.form-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
+.field label{display:block; font-weight:800; font-size:.85rem; color:var(--green-d); margin-bottom:6px;}
+.field input{
+  width:100%; padding:13px 15px; border-radius:13px; border:2px solid #dbe7db; font-size:.95rem;
+  font-family:inherit; outline:none; transition:.2s; background:#fbfdfb;
+}
+.field input:focus{border-color:var(--green-l); background:#fff; box-shadow:0 0 0 4px rgba(102,187,106,.18);}
+.quiz-head{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+.hud{display:flex; gap:9px; flex-wrap:wrap;}
+.hud .chip{
+  background:#fff; border-radius:999px; padding:8px 15px; font-weight:800; font-size:.85rem;
+  box-shadow:var(--shadow-s); border:2px solid rgba(46,125,50,.14); display:flex; align-items:center; gap:6px;
+}
+.hud .chip.lives{color:#c62828;}
+.hud .chip.score{color:var(--green-d);}
+.hud .chip.coins{color:#e65100;}
+.hud .chip.timer{color:var(--blue);}
+.progress-outer{height:12px; background:#e3ece3; border-radius:99px; overflow:hidden; margin-bottom:16px;}
+.progress-inner{height:100%; width:0%; border-radius:99px; background:linear-gradient(90deg,#66bb6a,#2e7d32); transition:width .4s;}
+.qcard{background:linear-gradient(135deg,#ffffff,#f7fbf7); border-radius:20px; padding:22px; box-shadow:var(--shadow); border:1px solid rgba(46,125,50,.1);}
+.qmeta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;}
+.qmeta .tag{background:var(--green-xl); color:var(--green-d); font-size:.72rem; font-weight:800; padding:4px 11px; border-radius:999px;}
+.qmeta .tag.lv{background:var(--amber-l); color:#8d6e00;}
+.qmeta .tag.icon{background:#fff; font-size:1rem; padding:2px 8px;}
+.qtext{font-size:clamp(1rem,2.4vw,1.16rem); font-weight:700; margin-bottom:16px; color:#243528;}
+.qimg{width:100%; max-height:280px; object-fit:cover; border-radius:16px; margin-bottom:16px; box-shadow:var(--shadow-s);}
+.opts{display:grid; gap:11px;}
+.opt{
+  display:flex; align-items:center; gap:13px; padding:14px 17px; border-radius:15px; background:#fff;
+  border:2.5px solid #e2ebe2; font-size:.94rem; font-weight:600; text-align:left; transition:.18s;
+  color:var(--ink); width:100%;
+}
+.opt:hover:not(:disabled){border-color:var(--green-l); background:var(--green-xl); transform:translateX(5px);}
+.opt:disabled{cursor:default;}
+.opt .letter{
+  width:33px;height:33px; flex:0 0 33px; border-radius:50%; background:var(--green-xl); color:var(--green-d);
+  display:grid; place-items:center; font-weight:900; font-size:.9rem;
+}
+.opt.correct{border-color:#2e7d32; background:#c8e6c9;}
+.opt.correct .letter{background:#2e7d32; color:#fff;}
+.opt.wrong{border-color:#c62828; background:#ffcdd2;}
+.opt.wrong .letter{background:#c62828; color:#fff;}
+.feedback{
+  margin-top:16px; padding:15px 18px; border-radius:15px; font-weight:700; display:none; animation:fade .35s;
+}
+.feedback.show{display:block;}
+.feedback.ok{background:#c8e6c9; color:#1b5e20; border-left:6px solid #2e7d32;}
+.feedback.no{background:#ffcdd2; color:#b71c1c; border-left:6px solid #c62828;}
+.result-hero{text-align:center; padding:14px;}
+.result-hero .big{font-size:4rem; animation:bounce 2s infinite;}
+.result-hero h2{font-size:1.8rem; color:var(--green-d);}
+.stars{font-size:2.1rem; letter-spacing:5px; margin:8px 0;}
+.locked{
+  background:linear-gradient(135deg,#fff8e1,#ffecb3); border:2.5px dashed var(--amber); border-radius:18px;
+  padding:24px; text-align:center;
+}
+.review-item{
+  background:#fff; border-radius:15px; padding:16px; margin-bottom:12px; box-shadow:var(--shadow-s);
+  border-left:6px solid var(--green-l);
+}
+.review-item.bad{border-left-color:var(--red);}
+.review-item h4{font-size:.97rem; margin-bottom:6px;}
+.review-item .ans{font-size:.87rem; margin:4px 0;}
+.review-item .exp{background:var(--green-xl); padding:11px 14px; border-radius:11px; font-size:.85rem; margin-top:8px; color:#1b5e20;}
+
+/* ============================= MODAL ============================= */
+.modal-bg{
+  position:fixed; inset:0; background:rgba(15,35,20,.62); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; z-index:4000; padding:16px;
+}
+.modal-bg.show{display:flex; animation:fade .25s;}
+.modal{
+  background:#fff; border-radius:22px; padding:26px; max-width:620px; width:100%; max-height:88vh;
+  overflow-y:auto; box-shadow:0 24px 60px rgba(0,0,0,.35); animation:pop .3s cubic-bezier(.2,1.3,.5,1);
+}
+@keyframes pop{from{transform:scale(.85); opacity:0;} to{transform:scale(1); opacity:1;}}
+.modal h3{color:var(--green-d); display:flex; align-items:center; gap:9px;}
+.modal-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;}
+
+/* ============================= TEACHER PANEL ============================= */
+.tp-table{width:100%; border-collapse:collapse; font-size:.83rem; margin-top:12px;}
+.tp-table th{background:var(--green); color:#fff; padding:9px; text-align:left;}
+.tp-table td{padding:9px; border-bottom:1px solid #eef3ee;}
+.tp-table tr:nth-child(even) td{background:#f8fbf8;}
+
+/* ============================= FOOTER ============================= */
+footer{
+  background:linear-gradient(120deg,#1b5e20,#2e7d32); color:#dcedc8; text-align:center;
+  padding:26px 14px; margin-top:30px; font-size:.85rem;
+}
+footer b{color:#ffd54f;}
+footer .dev{
+  display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.12);
+  padding:8px 18px; border-radius:999px; margin-top:9px; font-weight:700;
+}
+
+/* ============================= RESPONSIVE ============================= */
+@media(max-width:900px){
+  .materi-wrap{grid-template-columns:1fr;}
+  .toc{position:static;}
+  .lab-grid{grid-template-columns:1fr;}
+  .puzzle-grid{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  body{font-size:15px;}
+  .brand span.txt{font-size:.98rem;}
+  .nav button{padding:7px 11px; font-size:.78rem;}
+  .card{padding:16px; border-radius:17px;}
+  .hero{padding:22px 17px;}
+  .bins{grid-template-columns:1fr;}
+  .bin-body{min-height:150px;}
+  .opt{padding:12px 13px; font-size:.88rem;}
+  .hud .chip{padding:6px 11px; font-size:.78rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOPBAR ============================ -->
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="logo">🧭</div>
+      <span class="txt">Detektif Gaya<small>MPI IPAS • Kelas 4 • Fase B</small></span>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-view="home" class="active">🏠 Beranda</button>
+      <button data-view="tujuan">🎯 Tujuan</button>
+      <button data-view="materi">📚 Materi</button>
+      <button data-view="lab">🔬 Lab Maya</button>
+      <button data-view="puzzle">🧩 Puzzle</button>
+      <button data-view="evaluasi">📝 Evaluasi</button>
+    </nav>
+    <button class="icon-btn" id="soundBtn" title="Suara ON/OFF">🔊</button>
+    <button class="icon-btn" id="teacherBtn" title="Mode Guru">🔐</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ HOME ============================ -->
+<section class="view active" id="view-home">
+  <div class="hero">
+    <span class="hero-deco" style="top:14px;left:12px;">🌿</span>
+    <span class="hero-deco" style="top:60%;right:20px;animation-delay:.7s;">🔍</span>
+    <span class="hero-deco" style="bottom:12px;left:42%;animation-delay:1.4s;">🧭</span>
+    <span class="hero-deco" style="top:20px;right:38%;animation-delay:2s;">🍃</span>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;">
+      <div>
+        <div class="badge-row">
+          <span class="pill">🌿 Ekspedisi Rimba Sains</span>
+          <span class="pill">📗 IPAS Kelas 4</span>
+          <span class="pill">⚡ Fase B</span>
+        </div>
+        <h1>Detektif Gaya 🔍</h1>
+        <p class="lead">
+          Selamat datang, Penjelajah Muda! Hari ini kita akan menyusuri rimba sains untuk memecahkan misteri
+          <b>Gaya Gesek</b> dan <b>Gaya Magnet</b>. Bawa kaca pembesar dan kompasmu — petualangan pengetahuan dimulai!
+        </p>
+        <div class="hero-cta" style="margin-top:18px;">
+          <button class="btn" data-goto="materi">📚 Mulai Jelajah Materi</button>
+          <button class="btn amber" data-goto="lab">🔬 Coba Lab Maya</button>
+          <button class="btn blue" data-goto="evaluasi">📝 Kerjakan Soal</button>
+        </div>
+      </div>
+      <div class="mascot">🕵️‍♂️</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <div class="section-title"><span class="em">🗺️</span> Peta Petualangan Belajarmu</div>
+    <p class="sub">Klik salah satu pos penjelajahan di bawah ini. Kamu bebas menjelajah tanpa perlu login — login hanya diminta saat mengerjakan soal evaluasi. 👍</p>
+    <div class="feature-grid">
+      <div class="feature" data-goto="tujuan">
+        <span class="ico">🎯</span>
+        <h3>Tujuan Pembelajaran</h3>
+        <p>Apa saja kompetensi yang akan kamu kuasai dalam ekspedisi ini?</p>
+      </div>
+      <div class="feature" data-goto="materi">
+        <span class="ico">📚</span>
+        <h3>Materi Pembelajaran</h3>
+        <p>Modul lengkap: konsep gaya, gaya gesek, gaya magnet, dan contoh sehari-hari.</p>
+      </div>
+      <div class="feature" data-goto="lab">
+        <span class="ico">🔬</span>
+        <h3>Lab Maya</h3>
+        <p>Geser variabel gaya, massa, dan koefisien gesekan. Amati percepatan secara langsung!</p>
+      </div>
+      <div class="feature" data-goto="puzzle">
+        <span class="ico">🧩</span>
+        <h3>Puzzle Drag &amp; Drop</h3>
+        <p>Seret kartu konsep ke keranjang yang tepat: Gaya Gesek atau Gaya Magnet.</p>
+      </div>
+      <div class="feature" data-goto="evaluasi">
+        <span class="ico">📝</span>
+        <h3>Evaluasi &amp; Badge</h3>
+        <p>10 soal seru dengan timer, nyawa, koin, dan badge Detektif Gaya!</p>
+      </div>
+      <div class="feature" id="featureTeacher">
+        <span class="ico">🔐</span>
+        <h3>Mode Guru</h3>
+        <p>Lihat kunci jawaban, rekap progres siswa, dan ekspor hasil ke Excel.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="em">💡</span> Tahukah Kamu?</div>
+    <div class="box amber">
+      <b>👍 Fakta Seru:</b> Tanpa gaya gesek, kita tidak bisa berjalan, sepeda tidak bisa direm, dan pensil tidak bisa menulis!
+      Tanpa gaya magnet, kompas tidak akan menunjuk arah dan pintu lemari tidak bisa menutup rapat. Keduanya adalah sahabat kehidupan kita.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TUJUAN ============================ -->
+<section class="view" id="view-tujuan">
+  <div class="card">
+    <div class="section-title"><span class="em">🎯</span> Tujuan Pembelajaran</div>
+    <p class="sub">Ekspedisi ini dirancang untuk Fase B (Kelas 3–4 SD) pada mata pelajaran IPAS.</p>
+
+    <div class="box">
+      <b>🎯 Tujuan Utama:</b><br>
+      Peserta didik mampu <b>menganalisis gaya gesek dan gaya magnet di kehidupan sehari-hari</b>.
+    </div>
+
+    <h4 style="color:var(--green-d);margin-top:18px;">Indikator Capaian</h4>
+    <ol>
+      <li><b>Menjelaskan</b> pengertian gaya sebagai tarikan atau dorongan yang mempengaruhi gerak benda.</li>
+      <li><b>Mengidentifikasi</b> contoh gaya gesek dan gaya magnet dalam kehidupan sehari-hari. 🔍</li>
+      <li><b>Menganalisis</b> pengaruh kekasaran permukaan terhadap besar gaya gesek melalui percobaan.</li>
+      <li><b>Menyelidiki</b> sifat kutub magnet: senama tolak-menolak, tidak senama tarik-menarik. 🧲</li>
+      <li><b>Membedakan</b> karakteristik gaya gesek dan gaya magnet berdasarkan ciri-cirinya.</li>
+      <li><b>Menyimpulkan</b> manfaat dan kerugian gaya gesek bagi aktivitas manusia. 👍</li>
+    </ol>
+
+    <div class="box blue">
+      <b>🧭 Profil Pelajar Pancasila:</b> Bernalar Kritis · Kreatif · Mandiri · Gotong Royong
+    </div>
+
+    <div class="box amber">
+      <b>🌟 Manfaat Setelah Belajar:</b> Kamu akan mampu menjelaskan mengapa lantai licin berbahaya, mengapa rem sepeda bekerja,
+      dan mengapa kompas selalu menunjuk utara-selatan. Keren, kan?
+    </div>
+
+    <div style="text-align:center;margin-top:20px;">
+      <button class="btn" data-goto="materi">📚 Lanjut ke Materi</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ MATERI ============================ -->
+<section class="view" id="view-materi">
+  <div class="materi-wrap">
+    <aside class="toc">
+      <h4>📑 Daftar Isi</h4>
+      <a href="#m1">1. Apa Itu Gaya?</a>
+      <a href="#m2">2. Gaya Gesek</a>
+      <a href="#m3">3. Manfaat &amp; Kerugian Gesek</a>
+      <a href="#m4">4. Percobaan Sederhana</a>
+      <a href="#m5">5. Gaya Magnet</a>
+      <a href="#m6">6. Sifat-Sifat Magnet</a>
+      <a href="#m7">7. Perbedaan Keduanya</a>
+      <a href="#m8">8. Kesimpulan</a>
+    </aside>
+
+    <article class="card materi-body">
+      <div class="section-title"><span class="em">📚</span> Modul Materi: Gaya Gesek &amp; Gaya Magnet</div>
+      <p class="sub">Bacalah dengan saksama. Kamu boleh membaca materi ini sebelum atau saat bermain. 👍</p>
+
+      <h3 id="m1">1️⃣ Apa Itu Gaya?</h3>
+      <p><b>Gaya</b> adalah tarikan atau dorongan yang dapat menyebabkan benda mengalami perubahan. Gaya dapat membuat benda:</p>
+      <ul>
+        <li>bergerak,</li>
+        <li>berhenti,</li>
+        <li>berubah arah,</li>
+        <li>berubah bentuk, atau</li>
+        <li>berubah kecepatannya.</li>
+      </ul>
+      <p>Contoh sederhana dalam kehidupan kita:</p>
+      <ul>
+        <li>Mendorong meja → meja bergerak.</li>
+        <li>Menendang bola → bola bergerak.</li>
+        <li>Menarik pintu → pintu terbuka.</li>
+      </ul>
+
+      <div class="materi-img">
+        <svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8f5e9"/><stop offset="100%" stop-color="#f1f8e9"/></linearGradient></defs>
+          <rect width="760" height="190" fill="url(#sky1)"/>
+          <rect x="0" y="140" width="760" height="50" fill="#c8e6c9"/>
+          <rect x="120" y="90" width="120" height="50" rx="8" fill="#8d6e63"/>
+          <text x="180" y="122" font-size="30" text-anchor="middle">📦</text>
+          <line x1="250" y1="115" x2="360" y2="115" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/>
+          <polygon points="360,105 385,115 360,125" fill="#2e7d32"/>
+          <text x="310" y="100" font-size="16" fill="#1b5e20" font-weight="bold">DORONGAN →</text>
+          <text x="180" y="175" font-size="15" fill="#1b5e20" text-anchor="middle" font-weight="bold">Benda bergerak karena diberi gaya</text>
+        </svg>
+      </div>
+
+      <h3 id="m2">2️⃣ Gaya Gesek</h3>
+      <p><b>Gaya gesek</b> adalah gaya yang muncul ketika dua permukaan benda saling bersentuhan dan menghambat gerakan benda.</p>
+      <p>Contohnya, ketika kita mendorong mobil-mobilan di lantai, lama-kelamaan mobil-mobilan itu berhenti. Mengapa? Karena ada
+      <b>gaya gesek</b> antara roda mobil-mobilan dan permukaan lantai yang melawan arah geraknya.</p>
+
+      <h4>🛝 Contoh Gaya Gesek dalam Kehidupan Sehari-hari</h4>
+      <ul>
+        <li>Sepatu dengan lantai saat kita berjalan.</li>
+        <li>Ban sepeda dengan permukaan jalan.</li>
+        <li>Penghapus dengan kertas saat menghapus tulisan.</li>
+        <li>Rem sepeda dengan roda saat memperlambat laju.</li>
+        <li>Telapak tangan dengan benda yang kita pegang.</li>
+      </ul>
+
+      <div class="box">
+        <b>🧠 Ingat!</b><br>
+        Permukaan <b>kasar</b> → gaya gesek <b>lebih besar</b>.<br>
+        Permukaan <b>licin</b> → gaya gesek <b>lebih kecil</b>.
+      </div>
+
+      <h3 id="m3">3️⃣ Manfaat &amp; Kerugian Gaya Gesek</h3>
+      <h4>✨ Manfaat Gaya Gesek</h4>
+      <p>Gaya gesek tidak selalu merugikan. Justru banyak kegiatan kita yang membutuhkan gaya gesek.</p>
+      <ol>
+        <li>👟 Kita dapat berjalan karena ada gesekan antara sepatu dan lantai.</li>
+        <li>🚲 Sepeda dapat berhenti ketika direm.</li>
+        <li>✏️ Pensil dapat menulis di atas kertas.</li>
+        <li>🛞 Ban kendaraan dapat mencengkeram jalan sehingga tidak selip.</li>
+        <li>🧗 Kita dapat memegang benda tanpa mudah terlepas.</li>
+      </ol>
+
+      <h4>⚠️ Kerugian Gaya Gesek</h4>
+      <ul>
+        <li>Ban kendaraan menjadi aus.</li>
+        <li>Sol sepatu menjadi tipis.</li>
+        <li>Mesin menjadi panas dan cepat rusak.</li>
+        <li>Permukaan benda menjadi terkikis.</li>
+      </ul>
+      <div class="box warn">
+        <b>⚠️ Hati-hati!</b> Lantai yang licin memiliki gaya gesek sangat kecil, sehingga kita mudah terpeleset. Berjalanlah dengan hati-hati di lantai basah!
+      </div>
+
+      <h3 id="m4">4️⃣ Percobaan Sederhana</h3>
+      <p><b>Alat dan bahan:</b> mobil-mobilan, meja, kain, dan kardus.</p>
+      <p><b>Langkah:</b> Dorong mobil-mobilan pada masing-masing permukaan dengan gaya yang sama besar.</p>
+      <p><b>Pertanyaan:</b> Pada permukaan mana mobil-mobilan bergerak paling jauh?</p>
+      <p><b>Hasil:</b> Permukaan yang lebih kasar menghasilkan gaya gesek lebih besar, sehingga benda lebih cepat berhenti. Sebaliknya,
+      pada permukaan licin, mobil-mobilan meluncur lebih jauh.</p>
+
+      <h3 id="m5">5️⃣ Gaya Magnet</h3>
+      <p><b>Magnet</b> adalah benda yang dapat menarik benda-benda tertentu yang memiliki sifat magnetis.</p>
+      <p>Magnet memiliki dua kutub, yaitu:</p>
+      <ul>
+        <li>🟥 <b>Kutub Utara (U)</b></li>
+        <li>🟦 <b>Kutub Selatan (S)</b></li>
+      </ul>
+
+      <h4>🧲 Benda yang Dapat Ditarik Magnet</h4>
+      <p>Tidak semua benda dapat ditarik magnet. Beberapa benda yang dapat ditarik magnet antara lain:</p>
+      <ul>
+        <li>besi,</li>
+        <li>baja,</li>
+        <li>benda lain yang mengandung bahan magnetis tertentu.</li>
+      </ul>
+      <p>Contoh: 🧲 → 📎 klip kertas · 🧲 → 🔩 benda besi · 🧲 → 🪛 beberapa jenis obeng.</p>
+      <p>Sedangkan benda seperti kayu, kertas, plastik, dan kaca pada umumnya <b>tidak</b> tertarik oleh magnet.</p>
+
+      <div class="materi-img">
+        <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="760" height="200" fill="#e3f2fd"/>
+          <rect x="120" y="70" width="240" height="60" rx="8" fill="#e53935"/>
+          <rect x="240" y="70" width="120" height="60" fill="#1e88e5"/>
+          <rect x="120" y="70" width="240" height="60" rx="8" fill="none" stroke="#fff" stroke-width="3"/>
+          <text x="185" y="110" font-size="26" fill="#fff" text-anchor="middle" font-weight="bold">U</text>
+          <text x="300" y="110" font-size="26" fill="#fff" text-anchor="middle" font-weight="bold">S</text>
+          <text x="420" y="118" font-size="34">🧲</text>
+          <circle cx="530" cy="100" r="17" fill="#90a4ae"/>
+          <text x="530" y="108" font-size="18" text-anchor="middle">📎</text>
+          <line x1="430" y1="100" x2="505" y2="100" stroke="#1565c0" stroke-width="5" stroke-dasharray="8 6"/>
+          <polygon points="505,93 522,100 505,107" fill="#1565c0"/>
+          <text x="380" y="172" font-size="16" fill="#0d47a1" text-anchor="middle" font-weight="bold">Magnet menarik klip kertas tanpa harus menyentuhnya</text>
+        </svg>
+      </div>
+
+      <h3 id="m6">6️⃣ Sifat-Sifat Magnet</h3>
+      <h4>1. Magnet mempunyai dua kutub</h4>
+      <p>Magnet memiliki Kutub Utara dan Kutub Selatan.</p>
+      <h4>2. Kutub senama tolak-menolak</h4>
+      <p>Utara + Utara → <b>Tolak-menolak</b><br>Selatan + Selatan → <b>Tolak-menolak</b></p>
+      <h4>3. Kutub tidak senama tarik-menarik</h4>
+      <p>Utara + Selatan → <b>Tarik-menarik</b></p>
+      <div class="box amber">
+        <b>👉 Cara mudah mengingat:</b><br>
+        <b>SAMA → TOLAK</b> &nbsp;|&nbsp; <b>BEDA → TARIK</b>
+      </div>
+      <h4>4. Gaya magnet dapat bekerja tanpa bersentuhan langsung</h4>
+      <p>Magnet dapat menarik benda magnetis meskipun tidak bersentuhan secara langsung. Contohnya magnet dapat menarik klip dari jarak tertentu.</p>
+
+      <h4>🏠 Contoh Pemanfaatan Magnet</h4>
+      <ul>
+        <li>🧲 magnet tempel di papan tulis,</li>
+        <li>🚪 magnet pada pintu lemari,</li>
+        <li>🧭 kompas penunjuk arah,</li>
+        <li>🔊 pengeras suara (speaker),</li>
+        <li>⚙️ beberapa jenis motor listrik,</li>
+        <li>🧸 mainan tertentu.</li>
+      </ul>
+
+      <h3 id="m7">7️⃣ Perbedaan Gaya Gesek dan Gaya Magnet</h3>
+      <table class="kv-table">
+        <thead><tr><th>Gaya Gesek</th><th>Gaya Magnet</th></tr></thead>
+        <tbody>
+          <tr><td>Terjadi karena dua permukaan bersentuhan</td><td>Dapat bekerja tanpa bersentuhan langsung</td></tr>
+          <tr><td>Menghambat gerakan benda</td><td>Dapat menarik atau menolak benda</td></tr>
+          <tr><td>Dipengaruhi kondisi permukaan (kasar/licin)</td><td>Dipengaruhi kutub dan bahan benda</td></tr>
+          <tr><td>Contoh: ban dengan jalan</td><td>Contoh: magnet menarik klip</td></tr>
+          <tr><td>Dapat memperlambat benda</td><td>Dapat membuat benda bergerak mendekati magnet</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="m8">8️⃣ Kesimpulan</h3>
+      <div class="box">
+        <b>🌟 Kesimpulan:</b><br>
+        <b>Gaya gesek</b> adalah gaya yang muncul karena dua permukaan bersentuhan. Gaya ini dapat menghambat gerakan,
+        tetapi juga membantu manusia dalam berbagai aktivitas.<br><br>
+        <b>Gaya magnet</b> adalah gaya yang dimiliki magnet untuk menarik benda tertentu dan dapat menyebabkan
+        tarik-menarik atau tolak-menolak antarkutub magnet.
+      </div>
+
+      <h4>🧠 Kata Kunci</h4>
+      <p><b>Gaya Gesek:</b></p>
+      <div>
+        <span class="keyword">bersentuhan</span>
+        <span class="keyword">menghambat</span>
+        <span class="keyword">kasar</span>
+        <span class="keyword">licin</span>
+      </p></div>
+      <p style="margin-top:10px;"><b>Gaya Magnet:</b></p>
+      <div>
+        <span class="keyword">menarik</span>
+        <span class="keyword">menolak</span>
+        <span class="keyword">kutub</span>
+        <span class="keyword">Utara</span>
+        <span class="keyword">Selatan</span>
+        <span class="keyword">benda magnetis</span>
+      </div>
+
+      <div style="text-align:center;margin-top:24px;">
+        <button class="btn" data-goto="lab">🔬 Lanjut ke Lab Maya</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================ LAB MAYA ============================ -->
+<section class="view" id="view-lab">
+  <div class="card">
+    <div class="section-title"><span class="em">🔬</span> Laboratorium Maya: Gaya, Gerak &amp; Dinamika</div>
+    <p class="sub">
+      Selidiki hubungan antara <b>besar gaya terapan (F)</b>, <b>massa beban (m)</b>, dan <b>koefisien gesekan (μ)</b>
+      terhadap percepatan gerak benda. Jelajahi juga interaksi kutub magnet! ⚡
+    </p>
+
+    <div class="mode-tabs">
+      <button class="active" data-mode="gesek">🛝 Mode Gaya Gesek</button>
+      <button data-mode="magnet">🧲 Mode Gaya Magnet</button>
+    </div>
+
+    <div class="lab-grid">
+      <div>
+        <div class="canvas-wrap">
+          <canvas id="labCanvas" width="900" height="340"></canvas>
+        </div>
+        <div class="canvas-wrap" style="margin-top:12px;">
+          <canvas id="graphCanvas" width="900" height="170"></canvas>
+        </div>
+      </div>
+
+      <div class="controls">
+        <!-- FRICTION CONTROLS -->
+        <div id="ctrlGesek">
+          <div class="slider-group">
+            <label>💪 Besar Gaya Terapan (F) <span class="val" id="valF">50 N</span></label>
+            <input type="range" id="rngF" min="0" max="200" step="5" value="50">
+          </div>
+          <div class="slider-group">
+            <label>⚖️ Massa Beban (m) <span class="val" id="valM">10 kg</span></label>
+            <input type="range" id="rngM" min="1" max="50" step="1" value="10">
+          </div>
+          <div class="slider-group">
+            <label>🛝 Koefisien Gesekan (μ) <span class="val" id="valMu">0,20</span></label>
+            <input type="range" id="rngMu" min="0" max="1" step="0.05" value="0.2">
+          </div>
+
+          <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;">
+            <button class="btn small" id="btnPlay">▶️ Jalankan</button>
+            <button class="btn small ghost" id="btnReset">🔄 Reset</button>
+          </div>
+
+          <div class="readout">
+            <div class="ro"><small>Gaya Normal (N)</small><b id="roN">100 N</b></div>
+            <div class="ro"><small>Gaya Gesek (f)</small><b id="roF">20 N</b></div>
+            <div class="ro"><small>Percepatan (a)</small><b id="roA">0 m/s²</b></div>
+            <div class="ro"><small>Kecepatan (v)</small><b id="roV">0 m/s</b></div>
+          </div>
+          <div class="status-bar" id="statusBar">🟡 Benda masih diam. Gaya gesek statis menahan benda.</div>
+
+          <div class="box" style="margin-top:16px;font-size:.85rem;">
+            <b>📌 Titik Pengamatan:</b>
+            <ul style="margin:8px 0 0;padding-left:18px;">
+              <li>Percepatan berbanding lurus dengan gaya total pada sistem.</li>
+              <li>Semakin besar massa beban, semakin kecil percepatan yang dihasilkan pada gaya konstan.</li>
+              <li>Gaya gesek statis harus terlampaui sebelum objek dapat mulai bergerak.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- MAGNET CONTROLS -->
+        <div id="ctrlMagnet" style="display:none;">
+          <div class="slider-group">
+            <label>📏 Jarak Antarmagnet <span class="val" id="valDist">6 cm</span></label>
+            <input type="range" id="rngDist" min="1" max="12" step="1" value="6">
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="font-weight:800;font-size:.87rem;color:var(--green-d);display:block;margin-bottom:7px;">🟥 Kutub Magnet Kiri (menghadap kanan)</label>
+            <div class="mode-tabs" style="margin-bottom:0;">
+              <button class="active" data-pole="left" data-val="U">Kutub Utara (U)</button>
+              <button data-pole="left" data-val="S">Kutub Selatan (S)</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="font-weight:800;font-size:.87rem;color:var(--green-d);display:block;margin-bottom:7px;">🟦 Kutub Magnet Kanan (menghadap kiri)</label>
+            <div class="mode-tabs" style="margin-bottom:0;">
+              <button class="active" data-pole="right" data-val="U">Kutub Utara (U)</button>
+              <button data-pole="right" data-val="S">Kutub Selatan (S)</button>
+            </div>
+          </div>
+
+          <div class="status-bar" id="magnetStatus">🧲 Kutub senama → TOLAK-MENOLAK 💥</div>
+
+          <div class="box blue" style="margin-top:16px;font-size:.85rem;">
+            <b>📌 Kesimpulan Cepat:</b><br>
+            <b>SAMA → TOLAK</b> &nbsp;|&nbsp; <b>BEDA → TARIK</b><br>
+            Gaya magnet dapat bekerja <b>tanpa sentuhan langsung</b>, berbeda dengan gaya gesek yang memerlukan sentuhan permukaan.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PUZZLE ============================ -->
+<section class="view" id="view-puzzle">
+  <div class="card">
+    <div class="section-title"><span class="em">🧩</span> Puzzle Drag &amp; Drop: Klasifikasi Gaya</div>
+    <p class="sub">
+      Seret setiap kartu konsep ke keranjang yang tepat — <b>Gaya Gesek</b> atau <b>Gaya Magnet</b>.
+      Di perangkat sentuh, kamu juga bisa <b>mengetuk kartu</b> lalu <b>mengetuk keranjang</b> tujuan. 🖐️
+    </p>
+
+    <div class="quiz-head">
+      <div class="hud">
+        <div class="chip score">⭐ Skor: <span id="puzzleScore">0</span></div>
+        <div class="chip coins">🪙 Koin: <span id="puzzleCoins">0</span></div>
+        <div class="chip">📦 Sisa: <span id="puzzleLeft">8</span></div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;">
+        <button class="btn small amber" id="btnHintPuzzle">💡 Petunjuk</button>
+        <button class="btn small ghost" id="btnResetPuzzle">🔄 Ulangi</button>
+      </div>
+    </div>
+
+    <div class="puzzle-grid">
+      <div>
+        <h4 style="color:var(--green-d);font-size:.95rem;">🎴 Kartu Konsep</h4>
+        <div class="pool" id="cardPool"></div>
+      </div>
+      <div>
+        <h4 style="color:var(--green-d);font-size:.95rem;">🧺 Keranjang Klasifikasi</h4>
+        <div class="bins">
+          <div class="bin" data-bin="gesek">
+            <div class="bin-head">🟠 GAYA GESEK</div>
+            <div class="bin-body" id="bin-gesek"></div>
+          </div>
+          <div class="bin" data-bin="magnet">
+            <div class="bin-head">🔵 GAYA MAGNET</div>
+            <div class="bin-body" id="bin-magnet"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feedback" id="puzzleFeedback"></div>
+  </div>
+</section>
+
+<!-- ============================ EVALUASI ============================ -->
+<section class="view" id="view-evaluasi">
+  <!-- LOGIN FORM -->
+  <div class="card" id="evalLogin">
+    <div class="section-title"><span class="em">📝</span> Lembar Soal Evaluasi</div>
+    <p class="sub">Isi identitasmu terlebih dahulu, lalu kunci evaluasi dari gurumu. 👍</p>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>👤 Nama Siswa</label>
+        <input type="text" id="inpNama" placeholder="Tulis nama lengkapmu..." autocomplete="off">
+      </div>
+      <div class="field">
+        <label>🏫 Kelas</label>
+        <input type="text" id="inpKelas" placeholder="Contoh: 4A" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>🔑 Kunci Evaluasi</label>
+        <input type="password" id="inpKey" placeholder="Masukkan kunci dari guru..." autocomplete="off">
+      </div>
+    </div>
+
+    <div class="box amber" style="margin-top:16px;">
+      <b>🔑 Kunci Evaluasi: <code>123456</code></b> — tanyakan kepada gurumu apabila belum tahu.
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn" id="btnStartQuiz">🚀 Mulai Kerjakan Soal</button>
+      <button class="btn ghost" data-goto="materi">📚 Baca Materi Dulu</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card" id="evalQuiz" style="display:none;">
+    <div class="quiz-head">
+      <div class="hud">
+        <div class="chip lives" id="hudLives">❤️❤️❤️</div>
+        <div class="chip score">⭐ <span id="hudScore">0</span></div>
+        <div class="chip coins">🪙 <span id="hudCoins">0</span></div>
+        <div class="chip timer" id="hudTimer">⏱️ 45s</div>
+        <div class="chip" id="hudNo">📄 1/10</div>
+      </div>
+      <button class="btn small ghost" id="btnQuitQuiz">🚪 Keluar</button>
+    </div>
+
+    <div class="progress-outer"><div class="progress-inner" id="quizProgress"></div></div>
+
+    <div class="qcard">
+      <div class="qmeta" id="qMeta"></div>
+      <img id="qImage" class="qimg" alt="Stimulus soal" style="display:none;">
+      <div class="qtext" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="feedback" id="qFeedback"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn small amber" id="btnHintQuiz">💡 Petunjuk</button>
+        <button class="btn small" id="btnNextQ" style="display:none;">➡️ Soal Berikutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card" id="evalResult" style="display:none;">
+    <div class="result-hero">
+      <div class="big" id="resEmoji">🏅</div>
+      <h2 id="resTitle">Selamat!</h2>
+      <div class="stars" id="resStars">⭐⭐⭐</div>
+      <p id="resDesc" style="color:var(--muted);"></p>
+
+      <div class="readout" style="max-width:640px;margin:18px auto;">
+        <div class="ro"><small>Skor Akhir</small><b id="resScore">0</b></div>
+        <div class="ro"><small>Koin</small><b id="resCoins">0</b></div>
+        <div class="ro"><small>Nyawa Tersisa</small><b id="resLives">0</b></div>
+        <div class="ro"><small>Badge</small><b id="resBadge">-</b></div>
+      </div>
+
+      <div class="modal-actions" style="justify-content:center;">
+        <button class="btn amber" id="btnReview">🔒 Lihat Pembahasan</button>
+        <button class="btn blue" id="btnExportStudent">📊 Unduh Hasil (Excel)</button>
+        <button class="btn ghost" id="btnRetryQuiz">🔄 Ulangi Evaluasi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div class="card" id="evalReview" style="display:none;">
+    <div class="section-title"><span class="em">🔍</span> Pembahasan Soal</div>
+    <p class="sub">Tinjau kembali jawabanmu dan pelajari pembahasannya. 👍</p>
+    <div id="reviewList"></div>
+    <div style="text-align:center;margin-top:18px;">
+      <button class="btn ghost" id="btnCloseReview">⬅️ Tutup Pembahasan</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div>🧭 <b>Detektif Gaya</b> — Multimedia Pembelajaran Interaktif IPAS Kelas 4 (Fase B)</div>
+  <div style="margin-top:6px;opacity:.85;">Materi: Gaya Gesek &amp; Gaya Magnet · Kurikulum Merdeka</div>
+  <div class="dev">👩‍🏫 Pengembang: <b>Kholifatu Rohmah S. Pd</b></div>
+</footer>
+
+<!-- ============================ MODAL ============================ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+/* ============================================================
+   SOUND ENGINE — suara lucu untuk anak
+   ============================================================ */
+const Sound = (function(){
+  let ctx = null, muted = false;
+  function ac(){
+    if(!ctx){ try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ctx.state === 'suspended'){ ctx.resume(); }
+    return ctx;
+  }
+  function beep(freq, dur, type, vol, slideTo, delay){
+    if(muted) return;
+    const c = ac(); if(!c) return;
+    const t0 = c.currentTime + (delay || 0);
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, t0);
+    if(slideTo){ o.frequency.exponentialRampToValueAtTime(Math.max(40, slideTo), t0 + dur); }
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol || 0.12, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0 + dur + 0.04);
+  }
+  return {
+    toggle(){ muted = !muted; if(!muted) ac(); return muted; },
+    isMuted(){ return muted; },
+    click(){ beep(680, 0.07, 'square', 0.05); },
+    pop(){ beep(300, 0.13, 'sine', 0.14, 950); },
+    swoosh(){ beep(900, 0.16, 'sine', 0.08, 220); },
+    correct(){ [523,659,784,1047].forEach((f,i)=>beep(f,0.17,'triangle',0.13,0,i*0.085)); },
+    wrong(){ beep(230,0.18,'sawtooth',0.09,150); beep(170,0.26,'sawtooth',0.08,95,0.15); },
+    boing(){ beep(170,0.26,'sine',0.13,540); beep(540,0.2,'sine',0.10,180,0.22); },
+    win(){ [523,587,659,784,880,1047,1319].forEach((f,i)=>beep(f,0.22,'triangle',0.12,0,i*0.125)); },
+    lose(){ [420,350,290,200].forEach((f,i)=>beep(f,0.26,'sine',0.11,0,i*0.16)); },
+    tick(){ beep(1300,0.035,'square',0.045); }
+  };
+})();
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+const navBtns = document.querySelectorAll('#nav button');
+function go(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if(el) el.classList.add('active');
+  navBtns.forEach(b=>b.classList.toggle('active', b.dataset.view === view));
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(view === 'lab'){ setTimeout(resizeLab, 60); }
+}
+navBtns.forEach(b=>b.addEventListener('click', ()=>{ Sound.click(); go(b.dataset.view); }));
+document.querySelectorAll('[data-goto]').forEach(b=>{
+  b.addEventListener('click', ()=>{ Sound.click(); go(b.dataset.goto); });
+});
+document.getElementById('featureTeacher').addEventListener('click', ()=>{ Sound.click(); openTeacher(); });
+document.querySelector('.toc').addEventListener('click', e=>{
+  if(e.target.tagName === 'A'){ Sound.click(); }
+});
+
+/* Sound toggle */
+document.getElementById('soundBtn').addEventListener('click', function(){
+  const m = Sound.toggle();
+  this.textContent = m ? '🔇' : '🔊';
+  if(!m) Sound.pop();
+});
+
+/* ============================================================
+   MODAL HELPER
+   ============================================================ */
+const modalBg = document.getElementById('modalBg');
+const modalBox = document.getElementById('modalBox');
+function openModal(html){
+  modalBox.innerHTML = html;
+  modalBg.classList.add('show');
+}
+function closeModal(){
+  modalBg.classList.remove('show');
+  modalBox.innerHTML = '';
+}
+modalBg.addEventListener('click', e=>{ if(e.target === modalBg) closeModal(); });
+
+/* ============================================================
+   LAB MAYA
+   ============================================================ */
+const labCanvas = document.getElementById('labCanvas');
+const graphCanvas = document.getElementById('graphCanvas');
+const lctx = labCanvas.getContext('2d');
+const gctx = graphCanvas.getContext('2d');
+
+const lab = {
+  mode:'gesek',
+  F:50, m:10, mu:0.2, g:10,
+  x:0, v:0, a:0,
+  running:false,
+  history:[],
+  time:0,
+  // magnet
+  gap:260, targetGap:260, leftPole:'U', rightPole:'S'
+};
+
+/* --- Controls --- */
+const rngF = document.getElementById('rngF');
+const rngM = document.getElementById('rngM');
+const rngMu = document.getElementById('rngMu');
+const rngDist = document.getElementById('rngDist');
+
+rngF.addEventListener('input', ()=>{
+  lab.F = +rngF.value;
+  document.getElementById('valF').textContent = lab.F + ' N';
+  Sound.click(); updateReadouts();
+});
+rngM.addEventListener('input', ()=>{
+  lab.m = +rngM.value;
+  document.getElementById('valM').textContent = lab.m + ' kg';
+  Sound.click(); updateReadouts();
+});
+rngMu.addEventListener('input', ()=>{
+  lab.mu = +rngMu.value;
+  document.getElementById('valMu').textContent = lab.mu.toFixed(2).replace('.', ',');
+  Sound.click(); updateReadouts();
+});
+rngDist.addEventListener('input', ()=>{
+  const d = +rngDist.value;
+  document.getElementById('valDist').textContent = d + ' cm';
+  lab.gap = 90 + d * 34;
+  lab.targetGap = lab.gap;
+  Sound.click();
+});
+
+document.querySelectorAll('.mode-tabs button[data-mode]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.mode-tabs button[data-mode]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    lab.mode = b.dataset.mode;
+    Sound.pop();
+    document.getElementById('ctrlGesek').style.display = lab.mode === 'gesek' ? 'block' : 'none';
+    document.getElementById('ctrlMagnet').style.display = lab.mode === 'magnet' ? 'block' : 'none';
+    document.getElementById('graphCanvas').style.display = lab.mode === 'gesek' ? 'block' : 'none';
+    if(lab.mode === 'magnet'){ updateMagnetState(); }
+  });
+});
+
+document.querySelectorAll('.mode-tabs button[data-pole]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const pole = b.dataset.pole, val = b.dataset.val;
+    document.querySelectorAll('.mode-tabs button[data-pole="'+pole+'"]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    if(pole === 'left') lab.leftPole = val; else lab.rightPole = val;
+    Sound.boing();
+    updateMagnetState();
+  });
+});
+
+document.getElementById('btnPlay').addEventListener('click', ()=>{
+  lab.running = !lab.running;
+  document.getElementById('btnPlay').textContent = lab.running ? '⏸️ Jeda' : '▶️ Jalankan';
+  Sound.pop();
+});
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  lab.x = 0; lab.v = 0; lab.a = 0; lab.running = false; lab.history = []; lab.time = 0;
+  document.getElementById('btnPlay').textContent = '▶️ Jalankan';
+  updateReadouts();
+  Sound.swoosh();
+});
+
+function updateMagnetState(){
+  const same = lab.leftPole === lab.rightPole;
+  const st = document.getElementById('magnetStatus');
+  if(same){
+    st.textContent = '🧲 Kutub senama (' + lab.leftPole + ' + ' + lab.rightPole + ') → TOLAK-MENOLAK 💥';
+    st.style.background = '#ffebee'; st.style.borderLeftColor = '#e53935'; st.style.color = '#b71c1c';
+  } else {
+    st.textContent = '🧲 Kutub tidak senama (' + lab.leftPole + ' + ' + lab.rightPole + ') → TARIK-MENARIK ❤️';
+    st.style.background = '#e3f2fd'; st.style.borderLeftColor = '#1565c0'; st.style.color = '#0d47a1';
+  }
+}
+
+function updateReadouts(){
+  const N = lab.m * lab.g;
+  const fmax = lab.mu * N;
+  let a = 0, status = '';
+  if(lab.F > fmax){
+    a = (lab.F - fmax) / lab.m;
+    status = '🟢 Benda BERGERAK! Gaya terapan lebih besar daripada gaya gesek.';
+  } else {
+    a = 0;
+    status = '🟡 Benda masih DIAM. Gaya gesek statis (' + fmax.toFixed(0) + ' N) menahan benda.';
+  }
+  document.getElementById('roN').textContent = N.toFixed(0) + ' N';
+  document.getElementById('roF').textContent = fmax.toFixed(0) + ' N';
+  document.getElementById('roA').textContent = a.toFixed(2).replace('.', ',') + ' m/s²';
+  document.getElementById('roV').textContent = lab.v.toFixed(2).replace('.', ',') + ' m/s';
+  const sb = document.getElementById('statusBar');
+  sb.textContent = status;
+  if(lab.F > fmax){
+    sb.style.background = '#e8f5e9'; sb.style.borderLeftColor = '#2e7d32'; sb.style.color = '#1b5e20';
+  } else {
+    sb.style.background = '#fff8e1'; sb.style.borderLeftColor = '#ffb300'; sb.style.color = '#6d4c00';
+  }
+  lab.a = a;
+}
+
+/* --- Physics update --- */
+function updateLab(dt){
+  if(lab.mode === 'gesek'){
+    const N = lab.m * lab.g;
+    const fmax = lab.mu * N;
+    if(lab.F > fmax){
+      lab.a = (lab.F - fmax) / lab.m;
+    } else {
+      lab.a = 0;
+      if(lab.v > 0){
+        // benda melambat karena gesek kinetis
+        lab.a = -(lab.mu * N) / lab.m;
+      }
+    }
+    if(lab.running){
+      lab.v += lab.a * dt;
+      if(lab.v < 0) lab.v = 0;
+      lab.x += lab.v * dt * 8; // 8 px per meter
+      lab.time += dt;
+      lab.history.push({t:lab.time, v:lab.v});
+      if(lab.history.length > 900) lab.history.shift();
+      if(lab.x > 800){ lab.x = 0; lab.v = 0; lab.history = []; lab.time = 0; }
+    }
+    updateReadouts();
+  } else {
+    // magnet animation
+    const same = lab.leftPole === lab.rightPole;
+    const speed = 90;
+    if(same){
+      lab.targetGap = 380;
+    } else {
+      lab.targetGap = 26;
+    }
+    lab.gap += Math.sign(lab.targetGap - lab.gap) * Math.min(Math.abs(lab.targetGap - lab.gap), speed * dt);
+  }
+}
+
+/* --- Render friction --- */
+function drawFriction(){
+  const W = labCanvas.width, H = labCanvas.height;
+  const grad = lctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#eaf6ea'); grad.addColorStop(1,'#f7fbf7');
+  lctx.fillStyle = grad; lctx.fillRect(0,0,W,H);
+
+  // Title strip
+  lctx.fillStyle = 'rgba(46,125,50,.08)';
+  lctx.fillRect(0,0,W,42);
+  lctx.fillStyle = '#1b5e20';
+  lctx.font = 'bold 19px "Segoe UI", sans-serif';
+  lctx.fillText('🛝 Simulasi Gaya Gesek — Bidang Datar', 20, 28);
+
+  const groundY = H - 82;
+
+  // Ground
+  let groundColor = '#cfd8dc';
+  if(lab.mu > 0.6) groundColor = '#8d6e63';
+  else if(lab.mu > 0.3) groundColor = '#a1887f';
+  else if(lab.mu > 0.1) groundColor = '#b0bec5';
+  lctx.fillStyle = groundColor;
+  lctx.fillRect(0, groundY, W, H - groundY);
+  lctx.fillStyle = 'rgba(255,255,255,.25)';
+  lctx.fillRect(0, groundY, W, 4);
+
+  // Roughness bumps
+  const bumps = Math.round(lab.mu * 46);
+  lctx.fillStyle = 'rgba(0,0,0,.18)';
+  for(let i = 0; i < bumps; i++){
+    const bx = (i * 47 + 13) % W;
+    const bh = 4 + (i % 4) * 3;
+    lctx.beginPath();
+    lctx.moveTo(bx, groundY);
+    lctx.lineTo(bx + 9, groundY);
+    lctx.lineTo(bx + 4.5, groundY - bh);
+    lctx.closePath();
+    lctx.fill();
+  }
+
+  // Box
+  const boxW = 76, boxH = 58;
+  const bx = 60 + lab.x;
+  const by = groundY - boxH;
+
+  lctx.save();
+  lctx.shadowColor = 'rgba(0,0,0,.22)'; lctx.shadowBlur = 12; lctx.shadowOffsetY = 5;
+  const bg = lctx.createLinearGradient(bx, by, bx, by + boxH);
+  bg.addColorStop(0,'#ffd54f'); bg.addColorStop(1,'#f9a825');
+  lctx.fillStyle = bg;
+  lctx.beginPath();
+  if(lctx.roundRect){ lctx.roundRect(bx, by, boxW, boxH, 12); } else { lctx.rect(bx, by, boxW, boxH); }
+  lctx.fill();
+  lctx.restore();
+  lctx.strokeStyle = '#e65100'; lctx.lineWidth = 3;
+  lctx.beginPath();
+  if(lctx.roundRect){ lctx.roundRect(bx, by, boxW, boxH, 12); } else { lctx.rect(bx, by, boxW, boxH); }
+  lctx.stroke();
+
+  lctx.font = '26px serif';
+  lctx.textAlign = 'center';
+  lctx.fillText('📦', bx + boxW/2, by + 40);
+  lctx.textAlign = 'left';
+
+  // Mass label
+  lctx.fillStyle = '#4e342e';
+  lctx.font = 'bold 13px "Segoe UI", sans-serif';
+  lctx.textAlign = 'center';
+  lctx.fillText(lab.m + ' kg', bx + boxW/2, by - 12);
+
+  // Force arrows
+  const cx = bx + boxW/2, cy = by + boxH/2;
+  const N = lab.m * lab.g;
+  const fmax = lab.mu * N;
+
+  // Applied force (green, right)
+  if(lab.F > 0){
+    const len = Math.min(150, lab.F * 0.75);
+    lctx.strokeStyle = '#2e7d32'; lctx.lineWidth = 7; lctx.lineCap = 'round';
+    lctx.beginPath(); lctx.moveTo(cx + boxW/2 + 8, cy); lctx.lineTo(cx + boxW/2 + 8 + len, cy); lctx.stroke();
+    lctx.fillStyle = '#2e7d32';
+    lctx.beginPath();
+    lctx.moveTo(cx + boxW/2 + 8 + len + 16, cy);
+    lctx.lineTo(cx + boxW/2 + 8 + len, cy - 11);
+    lctx.lineTo(cx + boxW/2 + 8 + len, cy + 11);
+    lctx.closePath(); lctx.fill();
+    lctx.font = 'bold 14px "Segoe UI", sans-serif';
+    lctx.textAlign = 'center';
+    lctx.fillText('F = ' + lab.F + ' N', cx + boxW/2 + 8 + len/2, cy - 18);
+  }
+
+  // Friction (red, left)
+  if(fmax > 0 && lab.F > 0){
+    const flen = Math.min(120, fmax * 0.55);
+    lctx.strokeStyle = '#e53935'; lctx.lineWidth = 6; lctx.lineCap = 'round';
+    lctx.beginPath(); lctx.moveTo(cx - boxW/2 - 8, cy + 20); lctx.lineTo(cx - boxW/2 - 8 - flen, cy + 20); lctx.stroke();
+    lctx.fillStyle = '#e53935';
+    lctx.beginPath();
+    lctx.moveTo(cx - boxW/2 - 8 - flen - 14, cy + 20);
+    lctx.lineTo(cx - boxW/2 - 8 - flen, cy + 9);
+    lctx.lineTo(cx - boxW/2 - 8 - flen, cy + 31);
+    lctx.closePath(); lctx.fill();
+    lctx.font = 'bold 13px "Segoe UI", sans-serif';
+    lctx.textAlign = 'center';
+    lctx.fillText('f gesek = ' + fmax.toFixed(0) + ' N', cx - boxW/2 - 8 - flen/2, cy + 44);
+  }
+
+  // Velocity indicator
+  lctx.textAlign = 'left';
+  lctx.fillStyle = '#1b5e20';
+  lctx.font = 'bold 14px "Segoe UI", sans-serif';
+  lctx.fillText('v = ' + lab.v.toFixed(2) + ' m/s', 20, H - 22);
+  lctx.fillText('a = ' + lab.a.toFixed(2) + ' m/s²', 150, H - 22);
+
+  // Track ruler
+  lctx.strokeStyle = 'rgba(0,0,0,.15)'; lctx.lineWidth = 1;
+  for(let i = 0; i <= 10; i++){
+    const rx = 60 + i * 80;
+    lctx.beginPath(); lctx.moveTo(rx, groundY + 8); lctx.lineTo(rx, groundY + 20); lctx.stroke();
+    lctx.fillStyle = 'rgba(0,0,0,.35)';
+    lctx.font = '11px "Segoe UI", sans-serif';
+    lctx.fillText((i * 10) + 'm', rx + 3, groundY + 34);
+  }
+}
+
+/* --- Render magnet --- */
+function drawMagnet(){
+  const W = labCanvas.width, H = labCanvas.height;
+  const grad = lctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#e3f2fd'); grad.addColorStop(1,'#f7fbff');
+  lctx.fillStyle = grad; lctx.fillRect(0,0,W,H);
+
+  lctx.fillStyle = 'rgba(21,101,192,.08)';
+  lctx.fillRect(0,0,W,42);
+  lctx.fillStyle = '#0d47a1';
+  lctx.font = 'bold 19px "Segoe UI", sans-serif';
+  lctx.fillText('🧲 Simulasi Interaksi Kutub Magnet', 20, 28);
+
+  const tableY = H - 90;
+  lctx.fillStyle = '#d7e6f5'; lctx.fillRect(0, tableY, W, H - tableY);
+  lctx.fillStyle = 'rgba(255,255,255,.5)'; lctx.fillRect(0, tableY, W, 4);
+
+  const mW = 170, mH = 68, mY = tableY - mH - 22;
+  const leftX = 170;
+  const rightX = leftX + mW + lab.gap;
+
+  // Left magnet
+  drawBarMagnet(leftX, mY, mW, mH, lab.leftPole, true);
+  // Right magnet
+  drawBarMagnet(rightX, mY, mW, mH, lab.rightPole, false);
+
+  // Force arrows between
+  const same = lab.leftPole === lab.rightPole;
+  const midX = (leftX + mW + rightX) / 2;
+  const arrowY = mY + mH/2 + 46;
+
+  lctx.lineWidth = 6; lctx.lineCap = 'round';
+  if(same){
+    // Repulsion: arrows point outward
+    lctx.strokeStyle = '#e53935';
+    lctx.beginPath(); lctx.moveTo(midX - 10, arrowY); lctx.lineTo(midX - 70, arrowY); lctx.stroke();
+    lctx.beginPath(); lctx.moveTo(midX + 10, arrowY); lctx.lineTo(midX + 70, arrowY); lctx.stroke();
+    lctx.fillStyle = '#e53935';
+    triangle(midX - 84, arrowY, -1); triangle(midX + 84, arrowY, 1);
+    lctx.font = 'bold 17px "Segoe UI", sans-serif'; lctx.textAlign = 'center';
+    lctx.fillText('💥 TOLAK-MENOLAK', midX, arrowY - 22);
+  } else {
+    lctx.strokeStyle = '#1565c0';
+    lctx.beginPath(); lctx.moveTo(midX - 70, arrowY); lctx.lineTo(midX - 10, arrowY); lctx.stroke();
+    lctx.beginPath(); lctx.moveTo(midX + 70, arrowY); lctx.lineTo(midX + 10, arrowY); lctx.stroke();
+    lctx.fillStyle = '#1565c0';
+    triangle(midX + 4, arrowY, 1); triangle(midX - 4, arrowY, -1);
+    lctx.font = 'bold 17px "Segoe UI", sans-serif'; lctx.textAlign = 'center';
+    lctx.fillText('❤️ TARIK-MENARIK', midX, arrowY - 22);
+  }
+
+  // Gap label
+  lctx.strokeStyle = '#37474f'; lctx.lineWidth = 2; lctx.setLineDash([6,5]);
+  lctx.beginPath();
+  lctx.moveTo(leftX + mW, mY - 34); lctx.lineTo(rightX, mY - 34); lctx.stroke();
+  lctx.setLineDash([]);
+  lctx.fillStyle = '#37474f'; lctx.font = 'bold 13px "Segoe UI", sans-serif'; lctx.textAlign = 'center';
+  lctx.fillText('jarak', (leftX + mW + rightX)/2, mY - 42);
+
+  lctx.textAlign = 'left';
+  lctx.fillStyle = '#0d47a1';
+  lctx.font = 'bold 14px "Segoe UI", sans-serif';
+  lctx.fillText('Magnet kiri: kutub menghadap = ' + lab.leftPole, 20, H - 22);
+  lctx.fillText('Magnet kanan: kutub menghadap = ' + lab.rightPole, 380, H - 22);
+}
+
+function drawBarMagnet(x, y, w, h, facingPole, isLeft){
+  const U = '#e53935', S = '#1e88e5';
+  const other = facingPole === 'U' ? 'S' : 'U';
+  const leftColor = isLeft ? other : facingPole;
+  const rightColor = isLeft ? facingPole : other;
+  const leftLetter = isLeft ? other : facingPole;
+  const rightLetter = isLeft ? facingPole : other;
+
+  lctx.save();
+  lctx.shadowColor = 'rgba(0,0,0,.25)'; lctx.shadowBlur = 14; lctx.shadowOffsetY = 6;
+  lctx.fillStyle = leftColor === 'U' ? U : S;
+  lctx.beginPath();
+  if(lctx.roundRect){ lctx.roundRect(x, y, w/2, h, [14,0,0,14]); } else { lctx.rect(x, y, w/2, h); }
+  lctx.fill();
+  lctx.fillStyle = rightColor === 'U' ? U : S;
+  lctx.beginPath();
+  if(lctx.roundRect){ lctx.roundRect(x + w/2, y, w/2, h, [0,14,14,0]); } else { lctx.rect(x + w/2, y, w/2, h); }
+  lctx.fill();
+  lctx.restore();
+
+  lctx.strokeStyle = 'rgba(255,255,255,.85)'; lctx.lineWidth = 3;
+  lctx.beginPath();
+  if(lctx.roundRect){ lctx.roundRect(x, y, w, h, 14); } else { lctx.rect(x, y, w, h); }
+  lctx.stroke();
+
+  lctx.fillStyle = '#fff';
+  lctx.font = 'bold 30px "Segoe UI", sans-serif';
+  lctx.textAlign = 'center';
+  lctx.fillText(leftLetter, x + w/4, y + h/2 + 11);
+  lctx.fillText(rightLetter, x + 3*w/4, y + h/2 + 11);
+  lctx.textAlign = 'left';
+}
+
+function triangle(x, y, dir){
+  lctx.beginPath();
+  lctx.moveTo(x + dir * 16, y);
+  lctx.lineTo(x, y - 11);
+  lctx.lineTo(x, y + 11);
+  lctx.closePath(); lctx.fill();
+}
+
+/* --- Render graph --- */
+function drawGraph(){
+  const W = graphCanvas.width, H = graphCanvas.height;
+  gctx.fillStyle = '#ffffff'; gctx.fillRect(0,0,W,H);
+  gctx.fillStyle = '#f7fbf7'; gctx.fillRect(0,0,W,34);
+  gctx.fillStyle = '#1b5e20';
+  gctx.font = 'bold 15px "Segoe UI", sans-serif';
+  gctx.fillText('📈 Grafik Kecepatan terhadap Waktu (v–t)', 16, 23);
+
+  const padL = 62, padR = 24, padT = 46, padB = 30;
+  const gw = W - padL - padR, gh = H - padT - padB;
+
+  // axes
+  gctx.strokeStyle = '#b0bec5'; gctx.lineWidth = 2;
+  gctx.beginPath(); gctx.moveTo(padL, padT); gctx.lineTo(padL, padT + gh); gctx.lineTo(padL + gw, padT + gh); gctx.stroke();
+
+  // grid
+  gctx.strokeStyle = '#e8f0e8'; gctx.lineWidth = 1;
+  for(let i = 1; i <= 5; i++){
+    const y = padT + gh - (gh/5) * i;
+    gctx.beginPath(); gctx.moveTo(padL, y); gctx.lineTo(padL + gw, y); gctx.stroke();
+  }
+
+  gctx.fillStyle = '#78909c'; gctx.font = '11px "Segoe UI", sans-serif';
+  gctx.fillText('v (m/s)', 8, padT + 12);
+  gctx.fillText('t (s)', padL + gw - 34, padT + gh + 22);
+
+  const maxV = Math.max(10, ...lab.history.map(p=>p.v), 1);
+  const maxT = 10;
+
+  // v labels
+  for(let i = 0; i <= 5; i++){
+    const val = (maxV / 5) * i;
+    const y = padT + gh - (gh/5) * i;
+    gctx.fillStyle = '#90a4ae';
+    gctx.textAlign = 'right';
+    gctx.fillText(val.toFixed(1), padL - 8, y + 4);
+    gctx.textAlign = 'left';
+  }
+
+  // line
+  if(lab.history.length > 1){
+    gctx.strokeStyle = '#2e7d32'; gctx.lineWidth = 4; gctx.lineJoin = 'round';
+    gctx.beginPath();
+    let started = false;
+    const t0 = lab.history[0].t;
+    lab.history.forEach(p=>{
+      const tt = p.t - t0;
+      if(tt > maxT) return;
+      const px = padL + (tt / maxT) * gw;
+      const py = padT + gh - (Math.min(p.v, maxV) / maxV) * gh;
+      if(!started){ gctx.moveTo(px, py); started = true; } else { gctx.lineTo(px, py); }
+    });
+    gctx.stroke();
+
+    // current point
+    const lastP = lab.history[lab.history.length - 1];
+    const tt = Math.min(lastP.t - t0, maxT);
+    const px = padL + (tt / maxT) * gw;
+    const py = padT + gh - (Math.min(lastP.v, maxV) / maxV) * gh;
+    gctx.fillStyle = '#ffb300';
+    gctx.beginPath(); gctx.arc(px, py, 7, 0, Math.PI*2); gctx.fill();
+    gctx.strokeStyle = '#fff'; gctx.lineWidth = 3; gctx.stroke();
+  } else {
+    gctx.fillStyle = '#b0bec5';
+    gctx.font = 'italic 14px "Segoe UI", sans-serif';
+    gctx.textAlign = 'center';
+    gctx.fillText('Tekan ▶️ Jalankan untuk melihat grafik kecepatan...', padL + gw/2, padT + gh/2);
+    gctx.textAlign = 'left';
+  }
+}
+
+/* --- Main loop --- */
+let lastTs = 0;
+function loop(ts){
+  const dt = Math.min(0.05, (ts - lastTs) / 1000) || 0.016;
+  lastTs = ts;
+  updateLab(dt);
+  if(lab.mode === 'gesek'){ drawFriction(); drawGraph(); }
+  else { drawMagnet(); }
+  requestAnimationFrame(loop);
+}
+function resizeLab(){ /* canvas has fixed internal resolution, CSS scales it */ }
+requestAnimationFrame(loop);
+updateReadouts();
+updateMagnetState();
+
+/* ============================================================
+   PUZZLE DRAG & DROP
+   ============================================================ */
+const PUZZLE_CARDS = [
+  { id:'c1', label:'👟 Sepatu menggesek lantai saat berjalan', cat:'gesek' },
+  { id:'c2', label:'📎 Magnet menarik klip kertas', cat:'magnet' },
+  { id:'c3', label:'🚲 Rem sepeda memperlambat roda', cat:'gesek' },
+  { id:'c4', label:'🧲 Kutub senama tolak-menolak', cat:'magnet' },
+  { id:'c5', label:'✏️ Penghapus menggosok kertas', cat:'gesek' },
+  { id:'c6', label:'🧭 Kompas menunjuk arah utara-selatan', cat:'magnet' },
+  { id:'c7', label:'🛞 Ban kendaraan mencengkeram jalan', cat:'gesek' },
+  { id:'c8', label:'🚪 Magnet menempel pada pintu lemari', cat:'magnet' }
+];
+
+let pScore = 0, pCoins = 0, pLeft = PUZZLE_CARDS.length, pSolved = 0;
+let selectedCard = null;
+let dragging = null;
+
+const cardPool = document.getElementById('cardPool');
+const puzzleFeedback = document.getElementById('puzzleFeedback');
+
+function initPuzzle(){
+  cardPool.innerHTML = '';
+  document.getElementById('bin-gesek').innerHTML = '';
+  document.getElementById('bin-magnet').innerHTML = '';
+  pScore = 0; pCoins = 0; pLeft = PUZZLE_CARDS.length; pSolved = 0; selectedCard = null;
+  updatePuzzleHUD();
+  puzzleFeedback.classList.remove('show');
+
+  const shuffled = PUZZLE_CARDS.slice().sort(()=>Math.random() - 0.5);
+  shuffled.forEach(card=>{
+    const el = document.createElement('div');
+    el.className = 'pcard';
+    el.dataset.cat = card.cat;
+    el.dataset.id = card.id;
+    el.textContent = card.label;
+    attachDrag(el);
+    cardPool.appendChild(el);
+  });
+}
+
+function updatePuzzleHUD(){
+  document.getElementById('puzzleScore').textContent = pScore;
+  document.getElementById('puzzleCoins').textContent = pCoins;
+  document.getElementById('puzzleLeft').textContent = pLeft;
+}
+
+function attachDrag(el){
+  let startX = 0, startY = 0, moved = false, ghost = null, offX = 0, offY = 0;
+
+  el.addEventListener('pointerdown', e=>{
+    if(el.classList.contains('correct')) return;
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    startX = e.clientX; startY = e.clientY; moved = false;
+    offX = e.clientX - rect.left;
+    offY = e.clientY - rect.top;
+
+    ghost = document.createElement('div');
+    ghost.className = 'ghost-card';
+    ghost.textContent = el.textContent;
+    ghost.style.width = rect.width + 'px';
+    ghost.style.left = (e.clientX - offX) + 'px';
+    ghost.style.top = (e.clientY - offY) + 'px';
+    document.body.appendChild(ghost);
+
+    dragging = { el, ghost };
+    el.classList.add('dragging');
+    el.setPointerCapture(e.pointerId);
+    Sound.click();
+  });
+
+  el.addEventListener('pointermove', e=>{
+    if(!dragging || dragging.el !== el) return;
+    if(Math.abs(e.clientX - startX) > 6 || Math.abs(e.clientY - startY) > 6) moved = true;
+    ghost.style.left = (e.clientX - offX) + 'px';
+    ghost.style.top = (e.clientY - offY) + 'px';
+
+    document.querySelectorAll('.bin').forEach(b=>b.classList.remove('over'));
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    const bin = under ? under.closest('.bin') : null;
+    if(bin) bin.classList.add('over');
+  });
+
+  el.addEventListener('pointerup', e=>{
+    if(!dragging || dragging.el !== el) return;
+    document.querySelectorAll('.bin').forEach(b=>b.classList.remove('over'));
+    if(ghost){ ghost.remove(); ghost = null; }
+    el.classList.remove('dragging');
+    dragging = null;
+
+    if(!moved){
+      // Tap = select
+      if(selectedCard === el){ el.classList.remove('selected'); selectedCard = null; }
+      else {
+        if(selectedCard) selectedCard.classList.remove('selected');
+        selectedCard = el; el.classList.add('selected'); Sound.pop();
+      }
+      return;
+    }
+
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    const bin = under ? under.closest('.bin') : null;
+    if(bin){ dropCard(el, bin); }
+  });
+
+  el.addEventListener('pointercancel', ()=>{
+    if(ghost){ ghost.remove(); ghost = null; }
+    el.classList.remove('dragging');
+    dragging = null;
+  });
+}
+
+document.querySelectorAll('.bin').forEach(bin=>{
+  bin.addEventListener('click', ()=>{
+    if(selectedCard){
+      dropCard(selectedCard, bin);
+      selectedCard.classList.remove('selected');
+      selectedCard = null;
+    }
+  });
+});
+
+function dropCard(el, bin){
+  const cat = el.dataset.cat;
+  const binCat = bin.dataset.bin;
+  const body = bin.querySelector('.bin-body');
+
+  if(cat === binCat){
+    // correct
+    el.classList.remove('selected');
+    el.classList.add('correct');
+    body.appendChild(el);
+    pScore += 10; pCoins += 5; pLeft--; pSolved++;
+    updatePuzzleHUD();
+    Sound.correct();
+    showPuzzleFeedback('👍 Tepat sekali! Kartu berhasil diklasifikasikan.', true);
+    if(pSolved === PUZZLE_CARDS.length){
+      setTimeout(()=>{
+        Sound.win();
+        showPuzzleFeedback('🏆 LUAR BIASA! Semua kartu berhasil kamu susun dengan tepat. Kamu Detektif Gaya sejati! 👍🎉', true);
+      }, 350);
+    }
+  } else {
+    el.classList.add('wrong');
+    Sound.wrong();
+    showPuzzleFeedback('❌ Belum tepat. Coba ingat kembali ciri-ciri gaya tersebut! 💡', false);
+    setTimeout(()=>{
+      el.classList.remove('wrong');
+      if(el.parentElement !== cardPool) cardPool.appendChild(el);
+    }, 700);
+  }
+}
+
+function showPuzzleFeedback(msg, ok){
+  puzzleFeedback.textContent = msg;
+  puzzleFeedback.className = 'feedback show ' + (ok ? 'ok' : 'no');
+}
+
+document.getElementById('btnResetPuzzle').addEventListener('click', ()=>{ Sound.swoosh(); initPuzzle(); });
+document.getElementById('btnHintPuzzle').addEventListener('click', ()=>{
+  Sound.pop();
+  showPuzzleFeedback('💡 Petunjuk: Gaya GESEK selalu melibatkan DUA PERMUKAAN yang BERSENTUHAN. Gaya MAGNET bekerja tanpa sentuhan dan berkaitan dengan KUTUB.', true);
+});
+
+initPuzzle();
+
+/* ============================================================
+   EVALUASI / QUIZ
+   ============================================================ */
+const QUESTIONS = [
+  {
+    icon:'🔬', level:'MOTS (C3)', bloom:'C3', hasImage:false, image:'',
+    question:'Gaya yang muncul ketika dua permukaan benda saling bersentuhan dan menghambat gerakan disebut ...',
+    options:['Gaya magnet','Gaya gesek','Gaya gravitasi','Gaya pegas'],
+    answer:1,
+    hint:'Gaya ini muncul saat dua permukaan saling bergesekan.',
+    explanation:'Gaya gesek adalah gaya yang timbul karena dua permukaan benda bersentuhan. Arah gaya gesek selalu melawan arah gerak benda. Contohnya gesekan antara sepatu dan lantai saat berjalan.'
+  },
+  {
+    icon:'🛣️', level:'MOTS (C3)', bloom:'C3', hasImage:true,
+    image:'https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=600&auto=format&fit=crop&q=80',
+    question:'Perhatikan gambar permukaan jalan di atas! Mengapa permukaan jalan dibuat kasar dan bertekstur?',
+    options:[
+      'Agar gaya gesek besar sehingga ban kendaraan tidak mudah selip',
+      'Agar gaya magnet pada kendaraan bertambah kuat',
+      'Agar kendaraan menjadi lebih ringan',
+      'Agar tidak ada gaya yang bekerja pada ban'
+    ],
+    answer:0,
+    hint:'Permukaan kasar menghasilkan gaya gesek yang besar.',
+    explanation:'Permukaan jalan dibuat kasar agar gaya gesek antara ban dan jalan menjadi besar. Gaya gesek yang besar membuat ban mencengkeram jalan sehingga kendaraan tidak mudah selip, terutama saat hujan.'
+  },
+  {
+    icon:'🧊', level:'MOTS (C3)', bloom:'C3', hasImage:false, image:'',
+    question:'Mengapa kita lebih mudah terpeleset ketika berjalan di lantai yang licin?',
+    options:[
+      'Karena gaya gesek pada lantai licin sangat kecil',
+      'Karena gaya magnet pada lantai licin sangat besar',
+      'Karena massa tubuh kita berkurang di lantai licin',
+      'Karena tidak ada gaya gravitasi di lantai licin'
+    ],
+    answer:0,
+    hint:'Permukaan licin memiliki gaya gesek yang kecil.',
+    explanation:'Lantai licin memiliki gaya gesek yang sangat kecil, sehingga sepatu tidak dapat mencengkeram lantai dengan baik. Akibatnya, kita mudah terpeleset. Sebaliknya, jalan berbatu memiliki gaya gesek besar sehingga kita lebih stabil.'
+  },
+  {
+    icon:'🧲', level:'MOTS (C3)', bloom:'C2', hasImage:false, image:'',
+    question:'Benda berikut ini yang dapat ditarik dengan kuat oleh magnet adalah ...',
+    options:['Karet penghapus','Kertas','Paku besi','Plastik'],
+    answer:2,
+    hint:'Magnet hanya menarik benda yang bersifat magnetis.',
+    explanation:'Magnet dapat menarik benda yang bersifat magnetis seperti besi, baja, dan nikel. Paku besi terbuat dari besi sehingga dapat ditarik magnet. Karet, kertas, dan plastik tidak dapat ditarik magnet.'
+  },
+  {
+    icon:'🔴', level:'MOTS (C3)', bloom:'C3', hasImage:false, image:'',
+    question:'Dua kutub magnet yang senama (sama) jika didekatkan akan ...',
+    options:['Tarik-menarik','Tolak-menolak','Menempel erat','Tidak terjadi apa-apa'],
+    answer:1,
+    hint:'Ingat: SAMA → TOLAK, BEDA → TARIK.',
+    explanation:'Kutub magnet yang senama (Utara dengan Utara atau Selatan dengan Selatan) akan tolak-menolak. Sedangkan kutub yang tidak senama (Utara dengan Selatan) akan tarik-menarik.'
+  },
+  {
+    icon:'🧭', level:'HOTS (C4-C6)', bloom:'C4', hasImage:false, image:'',
+    question:'Mengapa jarum kompas selalu menunjuk ke arah utara dan selatan?',
+    options:[
+      'Karena kompas berisi air yang mengalir',
+      'Karena jarum kompas adalah magnet yang dipengaruhi medan magnet bumi',
+      'Karena kompas ditiup oleh angin dari utara',
+      'Karena kompas ditarik oleh gaya gravitasi bumi'
+    ],
+    answer:1,
+    hint:'Bumi memiliki medan magnet yang sangat besar.',
+    explanation:'Jarum kompas terbuat dari magnet kecil. Karena bumi memiliki medan magnet, jarum kompas selalu berinteraksi dengan kutub magnet bumi sehingga menunjuk arah utara-selatan. Gaya magnet dapat bekerja tanpa sentuhan langsung.'
+  },
+  {
+    icon:'🚴', level:'HOTS (C4-C6)', bloom:'C5', hasImage:false, image:'',
+    question:'Ban sepeda yang sudah botak (alur hilang) lebih mudah selip di jalan basah. Penjelasan paling tepat adalah ...',
+    options:[
+      'Gaya gesek berkurang karena alur ban dan air mengurangi cengkeraman',
+      'Gaya magnet pada ban bertambah besar',
+      'Massa sepeda berkurang sehingga ban melayang',
+      'Gaya dorong pengendara hilang saat hujan'
+    ],
+    answer:0,
+    hint:'Alur ban berfungsi membuang air dan menambah cengkeraman.',
+    explanation:'Alur pada ban berfungsi membuang air dan memperbesar gaya gesek antara ban dan jalan. Jika ban sudah botak, air terperangkap di antara ban dan jalan sehingga gaya gesek berkurang dan sepeda mudah selip.'
+  },
+  {
+    icon:'📊', level:'NUMERASI', bloom:'C3', hasImage:false, image:'',
+    question:'Sebuah balok didorong dengan gaya 60 N ke kanan. Gaya gesek yang melawan gerak balok sebesar 20 N. Berapa besar gaya total (resultan) yang bekerja pada balok?',
+    options:['20 N','40 N','60 N','80 N'],
+    answer:1,
+    hint:'Gaya total = gaya dorong − gaya gesek (karena arahnya berlawanan).',
+    explanation:'Gaya dorong 60 N ke kanan dan gaya gesek 20 N ke kiri (berlawanan arah), sehingga resultan gaya = 60 N − 20 N = 40 N ke kanan. Karena resultan gaya tidak nol, balok bergerak dipercepat.'
+  },
+  {
+    icon:'📎', level:'HOTS (C4-C6)', bloom:'C4', hasImage:false, image:'',
+    question:'Ketika sebuah magnet didekatkan pada klip kertas, klip itu langsung tertarik dan menempel walaupun belum disentuh. Hal ini menunjukkan bahwa ...',
+    options:[
+      'Gaya magnet dapat bekerja tanpa sentuhan langsung',
+      'Klip kertas diberi lem sebelumnya',
+      'Gaya gesek menghilang di sekitar magnet',
+      'Klip kertas terbuat dari karet elastis'
+    ],
+    answer:0,
+    hint:'Perhatikan: magnet menarik klip dari jarak tertentu.',
+    explanation:'Peristiwa ini membuktikan bahwa gaya magnet dapat bekerja tanpa memerlukan sentuhan langsung. Berbeda dengan gaya gesek yang baru muncul ketika dua permukaan bersentuhan.'
+  },
+  {
+    icon:'💡', level:'LITERASI', bloom:'C4', hasImage:false, image:'',
+    question:'Perhatikan pernyataan berikut! (1) Ban kendaraan menjadi aus. (2) Sol sepatu menjadi tipis. (3) Kita dapat berjalan tanpa terpeleset. (4) Mesin menjadi cepat panas.\nManakah yang merupakan MANFAAT gaya gesek?',
+    options:['(1) dan (2)','(1) dan (4)','(2) dan (3)','(3) saja'],
+    answer:3,
+    hint:'Manfaat = keuntungan yang kita rasakan, bukan kerusakan.',
+    explanation:'Yang termasuk manfaat gaya gesek adalah pernyataan (3): kita dapat berjalan tanpa terpeleset karena adanya gesekan antara sepatu dan lantai. Pernyataan (1), (2), dan (4) merupakan kerugian gaya gesek karena menyebabkan keausan dan panas.'
+  }
+];
+
+const quiz = {
+  name:'', kelas:'', index:0, score:0, coins:0, lives:3,
+  timer:null, timeLeft:0, answered:false, records:[], active:false
+};
+
+const evalLogin = document.getElementById('evalLogin');
+const evalQuiz = document.getElementById('evalQuiz');
+const evalResult = document.getElementById('evalResult');
+const evalReview = document.getElementById('evalReview');
+
+document.getElementById('btnStartQuiz').addEventListener('click', ()=>{
+  const nama = document.getElementById('inpNama').value.trim();
+  const kelas = document.getElementById('inpKelas').value.trim();
+  const key = document.getElementById('inpKey').value.trim();
+
+  if(!nama){ alert('✋ Nama siswa belum diisi ya!'); return; }
+  if(!kelas){ alert('✋ Kelas belum diisi ya!'); return; }
+  if(key !== '123456'){ alert('🔑 Kunci evaluasi salah. Tanyakan kepada gurumu ya!'); Sound.wrong(); return; }
+
+  quiz.name = nama; quiz.kelas = kelas;
+  quiz.index = 0; quiz.score = 0; quiz.coins = 0; quiz.lives = 3;
+  quiz.records = []; quiz.active = true;
+
+  Sound.win();
+  evalLogin.style.display = 'none';
+  evalResult.style.display = 'none';
+  evalReview.style.display = 'none';
+  evalQuiz.style.display = 'block';
+  renderQuestion();
+});
+
+function renderQuestion(){
+  if(quiz.index >= QUESTIONS.length){ finishQuiz(); return; }
+  const q = QUESTIONS[quiz.index];
+  quiz.answered = false;
+
+  // HUD
+  document.getElementById('hudLives').textContent = '❤️'.repeat(quiz.lives) + '🤍'.repeat(Math.max(0, 3 - quiz.lives));
+  document.getElementById('hudScore').textContent = quiz.score;
+  document.getElementById('hudCoins').textContent = quiz.coins;
+  document.getElementById('hudNo').textContent = '📄 ' + (quiz.index + 1) + '/' + QUESTIONS.length;
+  document.getElementById('quizProgress').style.width = ((quiz.index) / QUESTIONS.length * 100) + '%';
+
+  // Meta
+  document.getElementById('qMeta').innerHTML =
+    '<span class="tag icon">' + q.icon + '</span>' +
+    '<span class="tag">' + q.level + '</span>' +
+    '<span class="tag lv">Bloom ' + q.bloom + '</span>';
+
+  // Image
+  const img = document.getElementById('qImage');
+  if(q.hasImage && q.image){
+    img.src = q.image;
+    img.style.display = 'block';
+    img.onerror = function(){ this.style.display = 'none'; };
+  } else {
+    img.style.display = 'none';
+    img.removeAttribute('src');
+  }
+
+  document.getElementById('qText').textContent = q.question;
+
+  const optsBox = document.getElementById('qOpts');
+  optsBox.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span>';
+    b.addEventListener('click', ()=>answerQuestion(i, b));
+    optsBox.appendChild(b);
+  });
+
+  const fb = document.getElementById('qFeedback');
+  fb.className = 'feedback'; fb.textContent = '';
+  document.getElementById('btnNextQ').style.display = 'none';
+  document.getElementById('btnHintQuiz').style.display = 'inline-flex';
+
+  startTimer(q.time_limit || 45);
+}
+
+function startTimer(sec){
+  clearInterval(quiz.timer);
+  quiz.timeLeft = sec;
+  document.getElementById('hudTimer').textContent = '⏱️ ' + sec + 's';
+  quiz.timer = setInterval(()=>{
+    quiz.timeLeft--;
+    document.getElementById('hudTimer').textContent = '⏱️ ' + quiz.timeLeft + 's';
+    if(quiz.timeLeft <= 5 && quiz.timeLeft > 0) Sound.tick();
+    if(quiz.timeLeft <= 0){
+      clearInterval(quiz.timer);
+      if(!quiz.answered) timeUp();
+    }
+  }, 1000);
+}
+
+function timeUp(){
+  quiz.answered = true;
+  const q = QUESTIONS[quiz.index];
+  quiz.lives--;
+  Sound.wrong();
+  document.querySelectorAll('#qOpts .opt').forEach((b, i)=>{
+    b.disabled = true;
+    if(i === q.answer) b.classList.add('correct');
+  });
+  const fb = document.getElementById('qFeedback');
+  fb.className = 'feedback show no';
+  fb.innerHTML = '⏰ Waktu habis! ❤️ Nyawa berkurang satu.<br><b>💡 Petunjuk:</b> ' + (q.hint || 'Bacalah kembali materi dengan saksama.');
+  quiz.records.push({
+    no: quiz.index + 1, question: q.question,
+    chosen: '(tidak dijawab)', correct: q.options[q.answer],
+    isCorrect: false, explanation: q.explanation
+  });
+  document.getElementById('btnNextQ').style.display = 'inline-flex';
+  document.getElementById('btnHintQuiz').style.display = 'none';
+  checkGameOver();
+}
+
+function answerQuestion(idx, btnEl){
+  if(quiz.answered) return;
+  quiz.answered = true;
+  clearInterval(quiz.timer);
+  const q = QUESTIONS[quiz.index];
+  const isCorrect = (idx === q.answer);
+
+  document.querySelectorAll('#qOpts .opt').forEach((b, i)=>{
+    b.disabled = true;
+    if(i === q.answer) b.classList.add('correct');
+    if(i === idx && !isCorrect) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('qFeedback');
+
+  if(isCorrect){
+    quiz.score += 10;
+    quiz.coins += 10;
+    Sound.correct();
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '👍 <b>Hebat! Jawabanmu benar!</b> ⭐ +10 poin, 🪙 +10 koin.<br><b>💡 Petunjuk:</b> ' + (q.hint || '-');
+  } else {
+    quiz.lives--;
+    Sound.wrong();
+    fb.className = 'feedback show no';
+    fb.innerHTML = '❌ <b>Belum tepat.</b> ❤️ Nyawa berkurang satu.<br><b>💡 Petunjuk:</b> ' + (q.hint || 'Bacalah kembali materi dengan saksama.');
+  }
+
+  quiz.records.push({
+    no: quiz.index + 1, question: q.question,
+    chosen: q.options[idx], correct: q.options[q.answer],
+    isCorrect: isCorrect, explanation: q.explanation
+  });
+
+  document.getElementById('hudScore').textContent = quiz.score;
+  document.getElementById('hudCoins').textContent = quiz.coins;
+  document.getElementById('hudLives').textContent = '❤️'.repeat(Math.max(0,quiz.lives)) + '🤍'.repeat(Math.max(0, 3 - quiz.lives));
+  document.getElementById('btnNextQ').style.display = 'inline-flex';
+  document.getElementById('btnHintQuiz').style.display = 'none';
+
+  checkGameOver();
+}
+
+function checkGameOver(){
+  if(quiz.lives <= 0){
+    setTimeout(()=>{
+      clearInterval(quiz.timer);
+      Sound.lose();
+      finishQuiz(true);
+    }, 900);
+  }
+}
+
+document.getElementById('btnNextQ').addEventListener('click', ()=>{
+  Sound.click();
+  quiz.index++;
+  if(quiz.index >= QUESTIONS.length){ finishQuiz(); }
+  else { renderQuestion(); }
+});
+
+document.getElementById('btnHintQuiz').addEventListener('click', ()=>{
+  const q = QUESTIONS[quiz.index];
+  const fb = document.getElementById('qFeedback');
+  fb.className = 'feedback show';
+  fb.style.background = '#fff8e1'; fb.style.color = '#6d4c00'; fb.style.borderLeft = '6px solid #ffb300';
+  fb.innerHTML = '💡 <b>Petunjuk:</b> ' + (q.hint || 'Bacalah kembali materi dengan saksama.');
+  Sound.pop();
+});
+
+document.getElementById('btnQuitQuiz').addEventListener('click', ()=>{
+  if(confirm('Yakin ingin keluar dari evaluasi? Progresmu akan hilang.')){
+    clearInterval(quiz.timer);
+    quiz.active = false;
+    evalQuiz.style.display = 'none';
+    evalLogin.style.display = 'block';
+    Sound.swoosh();
+  }
+});
+
+function finishQuiz(gameOver){
+  clearInterval(quiz.timer);
+  quiz.active = false;
+  evalQuiz.style.display = 'none';
+  evalResult.style.display = 'block';
+  document.getElementById('quizProgress').style.width = '100%';
+
+  const maxScore = QUESTIONS.length * 10;
+  const finalScore = Math.round((quiz.score / maxScore) * 100);
+
+  let badge = '🧭 Calon Detektif', emoji = '🧭', stars = '⭐', title = 'Terus Semangat!';
+  if(finalScore >= 90){ badge = '🏅 Master Detektif Gaya'; emoji = '🏆'; stars = '⭐⭐⭐⭐⭐'; title = 'Luar Biasa!'; }
+  else if(finalScore >= 75){ badge = '🥈 Detektif Gaya Andal'; emoji = '🎉'; stars = '⭐⭐⭐⭐'; title = 'Bagus Sekali!'; }
+  else if(finalScore >= 60){ badge = '🥉 Penjelajah Gaya'; emoji = '😊'; stars = '⭐⭐⭐'; title = 'Kerja Bagus!'; }
+  else { badge = '🧭 Calon Detektif'; emoji = '💪'; stars = '⭐⭐'; title = 'Ayo Coba Lagi!'; }
+
+  if(gameOver){ emoji = '💪'; title = 'Nyawa Habis!'; badge = '🧭 Calon Detektif'; }
+
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resTitle').textContent = title;
+  document.getElementById('resStars').textContent = stars;
+  document.getElementById('resDesc').textContent =
+    'Terima kasih, ' + quiz.name + ' dari kelas ' + quiz.kelas + '! Kamu telah menyelesaikan ekspedisi Detektif Gaya. 👍';
+  document.getElementById('resScore').textContent = finalScore;
+  document.getElementById('resCoins').textContent = quiz.coins;
+  document.getElementById('resLives').textContent = Math.max(0, quiz.lives);
+  document.getElementById('resBadge').textContent = badge;
+
+  // Save history
+  saveHistory({
+    nama: quiz.name, kelas: quiz.kelas, skor: finalScore,
+    koin: quiz.coins, nyawa: Math.max(0, quiz.lives), badge: badge,
+    tanggal: new Date().toLocaleString('id-ID'),
+    detail: quiz.records
+  });
+
+  if(!gameOver) Sound.win(); 
+}
+
+/* Review / Pembahasan */
+document.getElementById('btnReview').addEventListener('click', ()=>{
+  openModal(
+    '<h3>🔒 Pembahasan Terkunci</h3>' +
+    '<p>Masukkan kunci pembahasan untuk membuka review soal dan pembahasan. Kunci: <b>@1</b></p>' +
+    '<div class="field"><input type="password" id="reviewKey" placeholder="Masukkan kunci..."></div>' +
+    '<div class="modal-actions">' +
+    '<button class="btn" id="btnUnlockReview">🔓 Buka Pembahasan</button>' +
+    '<button class="btn ghost" id="btnCancelReview">Batal</button>' +
+    '</div>'
+  );
+  document.getElementById('btnCancelReview').addEventListener('click', closeModal);
+  document.getElementById('btnUnlockReview').addEventListener('click', ()=>{
+    const k = document.getElementById('reviewKey').value.trim();
+    if(k === '@1'){
+      closeModal();
+      showReview();
+      Sound.correct();
+    } else {
+      Sound.wrong();
+      alert('❌ Kunci pembahasan salah. Kunci yang benar: @1');
+    }
+  });
+});
+
+function showReview(){
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  quiz.records.forEach(r=>{
+    const d = document.createElement('div');
+    d.className = 'review-item' + (r.isCorrect ? '' : ' bad');
+    d.innerHTML =
+      '<h4>' + (r.isCorrect ? '👍' : '❌') + ' Soal ' + r.no + '</h4>' +
+      '<div style="font-size:.87rem;margin-bottom:6px;">' + r.question + '</div>' +
+      '<div class="ans">Jawabanmu: <b style="color:' + (r.isCorrect ? '#2e7d32' : '#c62828') + '">' + r.chosen + '</b></div>' +
+      '<div class="ans">Kunci: <b style="color:#2e7d32">' + r.correct + '</b></div>' +
+      '<div class="exp">💡 <b>Pembahasan:</b> ' + r.explanation + '</div>';
+    list.appendChild(d);
+  });
+  evalResult.style.display = 'none';
+  evalReview.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('btnCloseReview').addEventListener('click', ()=>{
+  evalReview.style.display = 'none';
+  evalResult.style.display = 'block';
+  Sound.click();
+});
+
+document.getElementById('btnRetryQuiz').addEventListener('click', ()=>{
+  evalResult.style.display = 'none';
+  evalReview.style.display = 'none';
+  evalLogin.style.display = 'block';
+  document.getElementById('inpKey').value = '';
+  Sound.pop();
+});
+
+document.getElementById('btnExportStudent').addEventListener('click', ()=>{
+  Sound.pop();
+  exportSingleResult();
+});
+
+/* ============================================================
+   LOCALSTORAGE
+   ============================================================ */
+function saveHistory(rec){
+  try{
+    const key = 'detektifGaya_history';
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    arr.push(rec);
+    localStorage.setItem(key, JSON.stringify(arr));
+  }catch(e){ console.warn('localStorage tidak tersedia', e); }
+}
+function getHistory(){
+  try{ return JSON.parse(localStorage.getItem('detektifGaya_history') || '[]'); }
+  catch(e){ return []; }
+}
+
+/* ============================================================
+   EXPORT EXCEL
+   ============================================================ */
+function buildExcelBlob(html){
+  const full = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+    'xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">' +
+    '<head><meta charset="utf-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>' +
+    '<x:ExcelWorksheet><x:Name>Hasil Evaluasi</x:Name><x:WorksheetOptions><x:DisplayGridlines/>' +
+    '</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
+    '<style>td,th{border:1px solid #ccc;padding:5px;font-family:Calibri;font-size:11pt;}' +
+    'th{background:#2e7d32;color:#fff;font-weight:bold;}</style></head><body>' + html + '</body></html>';
+  return new Blob(['\ufeff' + full], { type:'application/vnd.ms-excel;charset=utf-8' });
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
+}
+
+function exportSingleResult(){
+  if(!quiz.records.length){ alert('Belum ada hasil untuk diekspor.'); return; }
+  const maxScore = QUESTIONS.length * 10;
+  const finalScore = Math.round((quiz.score / maxScore) * 100);
+
+  let html = '<h2>Hasil Evaluasi — Detektif Gaya (IPAS Kelas 4)</h2>';
+  html += '<table><tr><th>Nama Siswa</th><th>Kelas</th><th>Tanggal</th><th>Skor</th><th>Koin</th><th>Nyawa</th></tr>';
+  html += '<tr><td>' + quiz.name + '</td><td>' + quiz.kelas + '</td><td>' + new Date().toLocaleString('id-ID') +
+          '</td><td>' + finalScore + '</td><td>' + quiz.coins + '</td><td>' + Math.max(0, quiz.lives) + '</td></tr></table>';
+
+  html += '<h3>Rincian Jawaban</h3><table><tr><th>No</th><th>Soal</th><th>Jawaban Siswa</th><th>Kunci</th><th>Status</th><th>Pembahasan</th></tr>';
+  quiz.records.forEach(r=>{
+    html += '<tr><td>' + r.no + '</td><td>' + escapeHtml(r.question) + '</td><td>' + escapeHtml(r.chosen) +
+            '</td><td>' + escapeHtml(r.correct) + '</td><td>' + (r.isCorrect ? 'BENAR' : 'SALAH') +
+            '</td><td>' + escapeHtml(r.explanation) + '</td></tr>';
+  });
+  html += '</table>';
+
+  downloadBlob(buildExcelBlob(html), 'Hasil_Evaluasi_' + quiz.name.replace(/\s+/g,'_') + '.xls');
+  Sound.pop();
+}
+
+function escapeHtml(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+/* ============================================================
+   MODE GURU
+   ============================================================ */
+document.getElementById('teacherBtn').addEventListener('click', ()=>{ Sound.click(); openTeacher(); });
+
+function openTeacher(){
+  openModal(
+    '<h3>🔐 Mode Guru</h3>' +
+    '<p>Masukkan kata sandi guru untuk membuka panel kunci jawaban, rekap progres siswa, dan ekspor Excel.</p>' +
+    '<div class="field"><input type="password" id="tpPass" placeholder="Kata sandi guru..."></div>' +
+    '<div class="modal-actions">' +
+    '<button class="btn" id="tpLogin">🔓 Buka Panel Guru</button>' +
+    '<button class="btn ghost" id="tpCancel">Batal</button>' +
+    '</div>'
+  );
+  document.getElementById('tpCancel').addEventListener('click', closeModal);
+  document.getElementById('tpLogin').addEventListener('click', ()=>{
+    const p = document.getElementById('tpPass').value.trim();
+    if(p === '123456'){ closeModal(); renderTeacherPanel(); Sound.correct(); }
+    else { Sound.wrong(); alert('❌ Kata sandi guru salah. Coba lagi.'); }
+  });
+}
+
+function renderTeacherPanel(){
+  const history = getHistory();
+  let html = '<h3>👩‍🏫 Panel Guru — Detektif Gaya</h3>';
+  html += '<p style="font-size:.88rem;color:#5b6b60;">Selamat datang, Bu Guru! Berikut rekap progres siswa dan bank soal.</p>';
+
+  html += '<div class="modal-actions" style="margin-top:10px;">' +
+          '<button class="btn small blue" id="tpExportAll">📊 Ekspor Semua Hasil ke Excel</button>' +
+          '<button class="btn small amber" id="tpExportBank">📋 Ekspor Bank Soal ke Excel</button>' +
+          '<button class="btn small ghost" id="tpClear">🗑️ Hapus Riwayat</button>' +
+          '</div>';
+
+  html += '<h4 style="color:#2e7d32;margin-top:18px;">📈 Rekap Progres Siswa (' + history.length + ' data)</h4>';
+  if(history.length === 0){
+    html += '<p style="font-size:.86rem;color:#78909c;font-style:italic;">Belum ada siswa yang menyelesaikan evaluasi.</p>';
+  } else {
+    html += '<div style="overflow-x:auto;"><table class="tp-table"><tr><th>No</th><th>Nama</th><th>Kelas</th><th>Skor</th><th>Koin</th><th>Badge</th><th>Tanggal</th></tr>';
+    history.forEach((h, i)=>{
+      html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(h.nama) + '</td><td>' + escapeHtml(h.kelas) +
+              '</td><td>' + h.skor + '</td><td>' + h.koin + '</td><td>' + escapeHtml(h.badge) +
+              '</td><td>' + escapeHtml(h.tanggal) + '</td></tr>';
+    });
+    html += '</table></div>';
+  }
+
+  html += '<h4 style="color:#2e7d32;margin-top:20px;">🔑 Kunci Jawaban & Pembahasan</h4>';
+  html += '<div style="overflow-x:auto;"><table class="tp-table"><tr><th>No</th><th>Soal</th><th>Kunci</th><th>Level</th><th>Pembahasan</th></tr>';
+  QUESTIONS.forEach((q, i)=>{
+    html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(q.question.substring(0, 90)) + '...</td>' +
+            '<td><b>' + escapeHtml(q.options[q.answer]) + '</b></td><td>' + q.level + '</td>' +
+            '<td>' + escapeHtml(q.explanation.substring(0, 100)) + '...</td></tr>';
+  });
+  html += '</table></div>';
+
+  html += '<div class="modal-actions"><button class="btn ghost" id="tpClose">⬅️ Tutup Panel</button></div>';
+
+  openModal(html);
+
+  document.getElementById('tpClose').addEventListener('click', closeModal);
+  document.getElementById('tpExportAll').addEventListener('click', ()=>{ Sound.pop(); exportAllResults(); });
+  document.getElementById('tpExportBank').addEventListener('click', ()=>{ Sound.pop(); exportQuestionBank(); });
+  document.getElementById('tpClear').addEventListener('click', ()=>{
+    if(confirm('Hapus semua riwayat hasil siswa? Tindakan ini tidak dapat dibatalkan.')){
+      localStorage.removeItem('detektifGaya_history');
+      closeModal(); Sound.swoosh();
+      setTimeout(renderTeacherPanel, 250);
+    }
+  });
+}
+
+function exportAllResults(){
+  const history = getHistory();
+  if(!history.length){ alert('Belum ada data hasil siswa untuk diekspor.'); return; }
+
+  let html = '<h2>Rekap Hasil Evaluasi — Detektif Gaya (IPAS Kelas 4)</h2>';
+  html += '<p>Diekspor pada: ' + new Date().toLocaleString('id-ID') + '</p>';
+  html += '<table><tr><th>No</th><th>Nama Siswa</th><th>Kelas</th><th>Skor</th><th>Koin</th><th>Nyawa</th><th>Badge</th><th>Tanggal</th></tr>';
+  history.forEach((h, i)=>{
+    html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(h.nama) + '</td><td>' + escapeHtml(h.kelas) +
+            '</td><td>' + h.skor + '</td><td>' + h.koin + '</td><td>' + h.nyawa + '</td><td>' +
+            escapeHtml(h.badge) + '</td><td>' + escapeHtml(h.tanggal) + '</td></tr>';
+  });
+  html += '</table>';
+
+  const total = history.length;
+  const rata = (history.reduce((s,h)=>s + h.skor, 0) / total).toFixed(1);
+  const tuntas = history.filter(h=>h.skor >= 75).length;
+  html += '<h3>Statistik Kelas</h3><table>' +
+          '<tr><th>Jumlah Siswa</th><th>Rata-rata Skor</th><th>Jumlah Tuntas (≥75)</th><th>Persentase Ketuntasan</th></tr>' +
+          '<tr><td>' + total + '</td><td>' + rata + '</td><td>' + tuntas + '</td><td>' +
+          ((tuntas/total)*100).toFixed(1) + '%</td></tr></table>';
+
+  // Detail per siswa
+  html += '<h3>Rincian Jawaban per Siswa</h3>';
+  history.forEach((h, idx)=>{
+    if(!h.detail) return;
+    html += '<h4>' + (idx+1) + '. ' + escapeHtml(h.nama) + ' — ' + escapeHtml(h.kelas) + ' (Skor: ' + h.skor + ')</h4>';
+    html += '<table><tr><th>No</th><th>Soal</th><th>Jawaban Siswa</th><th>Kunci</th><th>Status</th></tr>';
+    h.detail.forEach(r=>{
+      html += '<tr><td>' + r.no + '</td><td>' + escapeHtml(r.question) + '</td><td>' + escapeHtml(r.chosen) +
+              '</td><td>' + escapeHtml(r.correct) + '</td><td>' + (r.isCorrect ? 'BENAR' : 'SALAH') + '</td></tr>';
+    });
+    html += '</table>';
+  });
+
+  downloadBlob(buildExcelBlob(html), 'Rekap_Hasil_Detektif_Gaya.xls');
+}
+
+function exportQuestionBank(){
+  let html = '<h2>Bank Soal — Detektif Gaya (IPAS Kelas 4, Fase B)</h2>';
+  html += '<p>Materi: Gaya Gesek dan Gaya Magnet · Pengembang: Kholifatu Rohmah S. Pd</p>';
+  html += '<table><tr><th>No</th><th>Level</th><th>Bloom</th><th>Soal</th><th>Opsi A</th><th>Opsi B</th><th>Opsi C</th><th>Opsi D</th><th>Kunci</th><th>Pembahasan</th></tr>';
+  QUESTIONS.forEach((q, i)=>{
+    html += '<tr><td>' + (i+1) + '</td><td>' + q.level + '</td><td>' + q.bloom + '</td>' +
+            '<td>' + escapeHtml(q.question) + '</td>' +
+            q.options.map(o=>'<td>' + escapeHtml(o) + '</td>').join('') +
+            '<td><b>' + escapeHtml(q.options[q.answer]) + '</b></td>' +
+            '<td>' + escapeHtml(q.explanation) + '</td></tr>';
+  });
+  html += '</table>';
+  downloadBlob(buildExcelBlob(html), 'Bank_Soal_Detektif_Gaya.xls');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+window.addEventListener('load', ()=>{
+  go('home');
+  updateReadouts();
+});
+</script>
+</body>
+</html>
